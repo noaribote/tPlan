@@ -1,0 +1,51 @@
+{
+  "name": "tPlan",
+  "version": "1.0.0",
+  "description": "                                            ",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "tplan",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "uninstallDisplayName": "tPlan",
+      "license": "license.md",
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "keywords": [],
+  "author": "Institut G4 | B1",
+  "contributors": [
+    {
+      "name": "RIBOTE--MORAL Noa"
+    },
+    {
+      "name": "XX Luis"
+    },
+    {
+      "name": "XX"
+    },
+    {
+      "name": "XX"
+    }
+  ],
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^42.11.8",
+    "electron-builder": "^26.15.3",
+    "electron-packager": "^14.2.1"
+  }
+}
