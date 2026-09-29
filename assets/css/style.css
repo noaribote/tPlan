@@ -1,0 +1,16 @@
+@import url('source/media.css');
+* { padding: 0; margin: 0; }
+:root {
+    --bg-color-white: #f1f1f1;
+}
+body {
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-color-white);
+}
+.FlexCenter, .FlexCenter2 { display: flex; justify-content: center; align-items: center; }.FlexCenter { flex-direction: column; }
+::selection {
+    color: white;
+    background: blue;
+}
+::-webkit-scrollbar { display: none; }
