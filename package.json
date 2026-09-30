@@ -1,7 +1,7 @@
 {
   "name": "tPlan",
   "version": "1.0.0",
-  "description": "Application de gestion de tâches",
+  "description": "Application de gestion de tâches.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
