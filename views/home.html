@@ -5,14 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tPlan - Gestionnaire de tâches</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/all.min.css">
+    <style>
+        /* Widget Spotify : petit, fixé en bas à droite */
+.spotify {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 280px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 20;
+}
+.spotify input { width: 100%; box-sizing: border-box; margin-bottom: 6px; font-size: 12px; }
+.spotify iframe { width: 100%; height: 80px; border: 0; }
+.spotify iframe:not([src]) { display: none; }
+    </style>
 </head>
 <body>
-    <nav></nav>
-    <main class="FlexCenter2">
-        <iframe src="https://alous.fr/widjets/001.html" frameborder="0"></iframe>
-        <iframe src="./source/bloc-note.html" frameborder="0"></iframe>
-        <iframe src="./source/taches.html" frameborder="0"></iframe>
+    <nav>
+        <button><i class="fa-solid fa-bars"></i></button>
+    </nav>
+    <main class="FlexCenter">
+        
+        <div class="PlacementIframes">
+            <iframe class="left" src="./source/agenda.html" loading="lazy" allowfullscreen=""></iframe>
+            <iframe class="top-right" src="./source/taches.html" loading="lazy" allowfullscreen=""></iframe>
+            <iframe class="bottom-right" src="./source/bloc-note.html" loading="lazy" allowfullscreen=""></iframe>
+        </div>
+
     </main>
-    <footer></footer>
+    <footer class="FlexCenter2">
+        <div class="spotify">
+            <input id="lienSpotify" placeholder="Lien Playlist">
+            <iframe id="playerSpotify" allow="encrypted-media"></iframe>
+        </div>
+        <button style="background: rgb(255, 208, 0);"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button style="background: black;"><i class="cib-spotify"></i></button>
+    </footer>
 </body>
+<script src="../controller/indexPoint.js" type="module"></script>
 </html>
