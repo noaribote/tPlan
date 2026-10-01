@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+#grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.section { position: relative; padding: 40px; border: 1px solid #ccc; cursor: grab; background: white; }
+
+/* Boutons Agrandir / Réduire : petits, en haut à gauche */
+.agrandir, .reduire {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 12px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+/* Le bouton "Réduire" n'apparaît que quand la section est agrandie */
+.reduire { display: none; }
+.section.agrandie .reduire { display: block; }
+.section.agrandie .agrandir { display: none; }
+
+/* Flèches gauche / droite : visibles seulement en mode agrandi */
+.precedent, .suivant {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+.precedent { left: 10px; }
+.suivant { right: 10px; }
+.section.agrandie .precedent,
+.section.agrandie .suivant { display: block; }
+
+/* Section agrandie : popup centré avec un fond sombre autour */
+.section.agrandie {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 70vh;
+  z-index: 10;
+  box-sizing: border-box;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6);
+}
+
+/* Widget Spotify : petit, fixé en bas à droite */
+.spotify {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 280px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 20;
+}
+.spotify input { width: 100%; box-sizing: border-box; margin-bottom: 6px; font-size: 12px; }
+.spotify iframe { width: 100%; height: 80px; border: 0; }
+.spotify iframe:not([src]) { display: none; }
+</style>
+</head>
+<body>
+
+<div id="grid">
+  <section class="section" draggable="true" data-id="stats">
+    Tâches
+    <button class="agrandir">Agrandir</button>
+    <button class="reduire">Réduire</button>
+    <button class="precedent">‹</button>
+    <button class="suivant">›</button>
+  </section>
+  <section class="section" draggable="true" data-id="messages">
+    Pense-bête
+    <button class="agrandir">Agrandir</button>
+    <button class="reduire">Réduire</button>
+    <button class="precedent">‹</button>
+    <button class="suivant">›</button>
+  </section>
+  <section class="section" draggable="true" data-id="agenda">
+    Agenda
+    <button class="agrandir">Agrandir</button>
+    <button class="reduire">Réduire</button>
+    <button class="precedent">‹</button>
+    <button class="suivant">›</button>
+  </section>
+</div>
+
+<!-- Widget Spotify (en dehors de la grille) -->
+<div class="spotify">
+  <input id="lienSpotify" placeholder="Lien Spotify">
+  <iframe id="playerSpotify" allow="encrypted-media"></iframe>
+</div>
+
+<script>
+const grid = document.getElementById("grid");
+let drag; // la section qu'on déplace
+
+grid.addEventListener("dragstart", (e) => drag = e.target);
+
+grid.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  const cible = e.target.closest(".section");
+  if (!cible || cible === drag) return;
+  const liste = [...grid.children];
+  if (liste.indexOf(drag) < liste.indexOf(cible)) cible.after(drag);
+  else cible.before(drag);
+});
+
+// On enregistre l'ordre quand on lâche la section
+grid.addEventListener("dragend", () => {
+  const ordre = [...grid.children].map((s) => s.dataset.id);
+  localStorage.setItem("ordre", JSON.stringify(ordre));
+});
+
+// Boutons Agrandir / Réduire et flèches
+grid.addEventListener("click", (e) => {
+  const section = e.target.closest(".section");
+
+  if (e.target.matches(".agrandir")) section.classList.add("agrandie");
+  if (e.target.matches(".reduire")) section.classList.remove("agrandie");
+
+  // Flèches : on passe à la section d'avant ou d'après (en boucle)
+  if (e.target.matches(".precedent, .suivant")) {
+    const liste = [...grid.children];
+    const pas = e.target.matches(".suivant") ? 1 : -1;
+    const index = (liste.indexOf(section) + pas + liste.length) % liste.length;
+    section.classList.remove("agrandie");
+    liste[index].classList.add("agrandie");
+  }
+});
+
+// Au chargement, on remet l'ordre enregistré
+JSON.parse(localStorage.getItem("ordre") || "[]").forEach((id) => {
+  const section = grid.querySelector(`[data-id="${id}"]`);
+  if (section) grid.append(section);
+});
+
+// ----- Widget Spotify -----
+const lien = document.getElementById("lienSpotify");
+const player = document.getElementById("playerSpotify");
+
+function chargerSpotify(url) {
+  if (!url.includes("open.spotify.com")) return;
+  // Transforme le lien normal en lien "embed" utilisable dans un iframe
+  player.src = url.replace("open.spotify.com/", "open.spotify.com/embed/");
+  localStorage.setItem("spotify", url);
+}
+
+lien.addEventListener("change", () => chargerSpotify(lien.value));
+
+// Au chargement, on remet le dernier lien enregistré
+const lienSauvegarde = localStorage.getItem("spotify");
+if (lienSauvegarde) {
+  lien.value = lienSauvegarde;
+  chargerSpotify(lienSauvegarde);
+}
+</script>
+
+</body>
+</html>

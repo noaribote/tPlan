@@ -1,0 +1,23 @@
+footer {
+    position: absolute;
+    bottom: 10px; right: 10px;
+}
+
+footer button {
+    margin: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    box-shadow: var(--boxshadow);
+}
+
+footer button i.cib-spotify {
+    color: #1ed760;
+    font-size: 30px;
+}
+
+footer button i.fa-pen-to-square {
+    color: white;
+    font-size: 20px;
+}

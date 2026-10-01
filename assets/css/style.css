@@ -1,11 +1,15 @@
 @import url('source/media.css');
 @import url('iframe.css');
 @import url('main.css');
-
-
+@import url('nav.css');
+@import url('footer.css');
 * { padding: 0; margin: 0; }
 :root {
-    --bg-color-white: #f1f1f1;
+    --bg-color-whitegrey: #edfcf8;
+    --bg-color-blue: blue;
+    --bg-color-black: black;
+    --bg-color-white: #ffffff;
+    --boxshadow: 0 15px 40px rgba(0,0,0,0.06);
 }
 body {
     height: 100vh;
@@ -14,7 +18,7 @@ body {
 }
 .FlexCenter, .FlexCenter2 { display: flex; justify-content: center; align-items: center; }.FlexCenter { flex-direction: column; }
 ::selection {
-    color: white;
-    background: blue;
+    color: var(--bg-color-white);
+    background: var(--bg-color-blue);
 }
 ::-webkit-scrollbar { display: none; }
