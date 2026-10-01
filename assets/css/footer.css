@@ -21,3 +21,17 @@ footer button i.fa-pen-to-square {
     color: white;
     font-size: 20px;
 }
+
+footer .spotify {
+    position: absolute;
+    right: 55px;
+    bottom: 55px;
+    width: min(320px, calc(100vw - 40px));
+    padding: 10px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: var(--boxshadow);
+}
+footer .spotify[hidden] { display: none; }
+footer .spotify input { width: 100%; box-sizing: border-box; padding: 8px; margin-bottom: 8px; }
+footer .spotify iframe { display: block; width: 100%; height: 80px; border: 0; box-shadow: none; border-radius: 0; }
