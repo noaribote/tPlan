@@ -1,0 +1,173 @@
+/* ---------- Variables (couleurs et réglages modifiables ici) ---------- */
+:root {
+  --fond: transparent;       /* laisse voir le fond de ta page */
+  --carte: #ffffff;          /* même blanc que tes autres blocs */
+  --encre: #1f2d2a;
+  --encre-douce: #66787a;
+  --accent: #1f7a63;         /* vert profond, assorti au vert menthe */
+  --accent-clair: #e8f7f2;   /* menthe très pâle */
+  --danger: #c0452f;
+  --bordure: #d3ebe3;
+  --rayon: 20px;
+  --rayon-petit: 12px;
+  --ombre: 0 6px 20px rgba(31, 122, 99, 0.08);
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--encre);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+/* ---------- En-tête ---------- */
+.app__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.25rem;
+}
+
+.app__header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.app__compteur {
+  margin: 0;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+  background: var(--accent-clair);
+  border-radius: 999px;
+}
+
+/* ---------- Formulaire ---------- */
+.formulaire {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: var(--carte);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+}
+
+label {
+  font-weight: 600;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font: inherit;
+  color: inherit;
+  background: #fbfefd;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-petit);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9bb0ad;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Contour visible au clavier */
+input:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--rayon-petit);
+  padding: 0.65rem 1.1rem;
+}
+
+.formulaire button {
+  margin-top: 0.5rem;
+  background: var(--accent);
+  color: #fff;
+}
+
+.formulaire button:hover {
+  filter: brightness(1.12);
+}
+
+/* ---------- Liste des notes ---------- */
+.liste {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.note {
+  padding: 1.1rem 1.4rem;
+  background: var(--carte);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+}
+
+.note h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.note p {
+  margin: 0 0 0.75rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.note time {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+}
+
+/* ---------- Boutons d'une note ---------- */
+.note__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.note__actions button {
+  padding: 0.4rem 0.9rem;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-clair);
+}
+
+.note__actions button:hover {
+  filter: brightness(0.96);
+}
+
+.note__actions .supprimer {
+  color: var(--danger);
+  background: #fdeeea;
+}

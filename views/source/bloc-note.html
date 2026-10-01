@@ -1,1 +1,55 @@
-<section></section>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloc-notes</title>
+  <link rel="stylesheet" href="../../assets/css/source/bloc-note.css">
+</head>
+<body>
+  <main class="app">
+
+    <header class="app__header">
+      <h1>Bloc-notes</h1>
+      <p class="app__compteur">2 notes</p>
+    </header>
+
+    <!-- Formulaire d'ajout -->
+    <form id="formulaire" class="formulaire">
+      <label for="titre">Titre</label>
+      <input id="titre" type="text" placeholder="Ex. : Courses de la semaine" required>
+
+      <label for="contenu">Note</label>
+      <textarea id="contenu" rows="4" placeholder="Écris ta note ici…" required></textarea>
+
+      <button type="submit">Ajouter la note</button>
+    </form>
+
+    <!-- Liste des notes : une balise <article class="note"> par note -->
+    <section id="liste" class="liste">
+
+      <article class="note">
+        <h2>Courses de la semaine</h2>
+        <p>Pain, œufs, lait, tomates.</p>
+        <time datetime="2026-10-01T09:30">1 octobre 2026, 09:30</time>
+        <div class="note__actions">
+          <button type="button">Modifier</button>
+          <button type="button" class="supprimer">Supprimer</button>
+        </div>
+      </article>
+
+      <article class="note">
+        <h2>Idée de projet</h2>
+        <p>Créer un petit site pour ranger mes recettes.</p>
+        <time datetime="2026-09-30T18:05">30 septembre 2026, 18:05</time>
+        <div class="note__actions">
+          <button type="button">Modifier</button>
+          <button type="button" class="supprimer">Supprimer</button>
+        </div>
+      </article>
+
+    </section>
+
+  </main>
+</body>
+</html>
