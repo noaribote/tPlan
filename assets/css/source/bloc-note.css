@@ -7,9 +7,9 @@
   --accent: #1f7a63;         /* vert profond, assorti au vert menthe */
   --accent-clair: #e8f7f2;   /* menthe très pâle */
   --danger: #c0452f;
-  --bordure: #d3ebe3;
-  --rayon: 20px;
-  --rayon-petit: 12px;
+  --bordure: #d5dbe2;
+  --rayon: 10px;
+  --rayon-petit: 8px;
   --ombre: 0 6px 20px rgba(31, 122, 99, 0.08);
 }
 
@@ -40,6 +40,22 @@ body {
   margin-bottom: 1.25rem;
 }
 
+.empty-state {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--encre-douce);
+  border: 1.5px dashed var(--bordure);
+  border-radius: var(--rayon);
+}
+
+[hidden] { display: none !important; }
+
+.app__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .app__header h1 {
   margin: 0;
   font-size: 1.75rem;
@@ -55,16 +71,78 @@ body {
   border-radius: 999px;
 }
 
-/* ---------- Formulaire ---------- */
-.formulaire {
+/* ---------- Bouton d'ajout et formulaire en fenêtre modale ---------- */
+.btn-ajouter,
+.btn-enregistrer {
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.btn-ajouter:hover,
+.btn-enregistrer:hover { filter: brightness(1.12); }
+
+.modal {
+  width: min(560px, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  padding: 0;
+  border: none;
+  border-radius: 14px;
+  background: var(--carte);
+  color: var(--encre);
+  box-shadow: 0 20px 50px rgba(20, 30, 45, 0.3);
+}
+
+.modal::backdrop { background: rgba(20, 30, 45, 0.55); }
+.modal[open] { animation: modal-in 0.2s ease; }
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.modal form {
+  display: grid;
+  max-height: calc(100vh - 2rem);
+}
+
+.modal__header,
+.modal__actions {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+}
+
+.modal__header { justify-content: space-between; border-bottom: 1px solid var(--bordure); }
+.modal__header h2 { margin: 0; font-size: 1.25rem; }
+.modal__actions { justify-content: flex-end; gap: 0.6rem; border-top: 1px solid var(--bordure); }
+
+.modal__contenu {
   display: grid;
   gap: 0.5rem;
-  padding: 1.5rem;
-  background: var(--carte);
-  border: 1px solid var(--bordure);
-  border-radius: var(--rayon);
-  box-shadow: var(--ombre);
+  padding: 1.25rem;
+  overflow-y: auto;
 }
+
+.modal__fermer,
+.btn-annuler {
+  font: inherit;
+  font-weight: 600;
+  color: var(--encre);
+  background: transparent;
+  border: 1.5px solid var(--bordure);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+}
+
+.modal__fermer { border: none; padding: 0.2rem 0.5rem; font-size: 1.5rem; line-height: 1; }
+.modal__fermer:hover, .btn-annuler:hover { border-color: var(--encre); }
 
 label {
   font-weight: 600;
@@ -77,7 +155,7 @@ textarea {
   font: inherit;
   color: inherit;
   background: #fbfefd;
-  border: 1px solid var(--bordure);
+  border: 1.5px solid var(--bordure);
   border-radius: var(--rayon-petit);
 }
 
@@ -98,23 +176,25 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+.btn-ajouter:focus-visible,
+.btn-enregistrer:focus-visible,
+.btn-annuler:focus-visible,
+.modal__fermer:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-clair);
+}
+
 button {
   font: inherit;
   font-weight: 600;
   cursor: pointer;
-  border: none;
+  border: 1.5px solid transparent;
   border-radius: var(--rayon-petit);
   padding: 0.65rem 1.1rem;
-}
-
-.formulaire button {
-  margin-top: 0.5rem;
-  background: var(--accent);
-  color: #fff;
-}
-
-.formulaire button:hover {
-  filter: brightness(1.12);
 }
 
 /* ---------- Liste des notes ---------- */
@@ -127,7 +207,7 @@ button {
 .note {
   padding: 1.1rem 1.4rem;
   background: var(--carte);
-  border: 1px solid var(--bordure);
+  border: 1.5px solid var(--bordure);
   border-radius: var(--rayon);
   box-shadow: var(--ombre);
 }
@@ -158,16 +238,32 @@ button {
 
 .note__actions button {
   padding: 0.4rem 0.9rem;
-  font-weight: 500;
-  color: var(--accent);
+  font-weight: 600;
+  color: var(--accent-dark, #0a5555);
   background: var(--accent-clair);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
 }
 
 .note__actions button:hover {
-  filter: brightness(0.96);
+  background: var(--accent);
+  color: #fff;
 }
 
 .note__actions .supprimer {
   color: var(--danger);
   background: #fdeeea;
+  border-color: var(--danger);
+}
+
+.note__actions .supprimer:hover {
+  color: #fff;
+  background: var(--danger);
+  border-color: var(--danger);
+  filter: none;
+}
+
+@media (max-width: 560px) {
+  .app__header { align-items: flex-start; gap: 0.75rem; flex-direction: column; }
+  .modal__actions button { flex: 1; }
 }

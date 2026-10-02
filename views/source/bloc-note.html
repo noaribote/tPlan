@@ -1,55 +1,46 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr-FR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bloc-notes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
   <link rel="stylesheet" href="../../assets/css/source/bloc-note.css">
 </head>
 <body>
   <main class="app">
-
     <header class="app__header">
       <h1>Bloc-notes</h1>
-      <p class="app__compteur">2 notes</p>
+      <div class="app__header-actions">
+        <p class="app__compteur" id="compteur">0 note</p>
+        <button type="button" class="btn-ajouter" id="ouvrir-modal">Ajouter une note</button>
+      </div>
     </header>
 
-    <!-- Formulaire d'ajout -->
-    <form id="formulaire" class="formulaire">
-      <label for="titre">Titre</label>
-      <input id="titre" type="text" placeholder="Ex. : Courses de la semaine" required>
-
-      <label for="contenu">Note</label>
-      <textarea id="contenu" rows="4" placeholder="Écris ta note ici…" required></textarea>
-
-      <button type="submit">Ajouter la note</button>
-    </form>
-
-    <!-- Liste des notes : une balise <article class="note"> par note -->
-    <section id="liste" class="liste">
-
-      <article class="note">
-        <h2>Courses de la semaine</h2>
-        <p>Pain, œufs, lait, tomates.</p>
-        <time datetime="2026-10-01T09:30">1 octobre 2026, 09:30</time>
-        <div class="note__actions">
-          <button type="button">Modifier</button>
-          <button type="button" class="supprimer">Supprimer</button>
-        </div>
-      </article>
-
-      <article class="note">
-        <h2>Idée de projet</h2>
-        <p>Créer un petit site pour ranger mes recettes.</p>
-        <time datetime="2026-09-30T18:05">30 septembre 2026, 18:05</time>
-        <div class="note__actions">
-          <button type="button">Modifier</button>
-          <button type="button" class="supprimer">Supprimer</button>
-        </div>
-      </article>
-
-    </section>
-
+    <p class="empty-state" id="empty-state" hidden>
+      Aucune note pour le moment. Cliquez sur « Ajouter une note » pour commencer.
+    </p>
+    <section id="liste" class="liste" aria-label="Mes notes"></section>
   </main>
+
+  <dialog class="modal" id="note-modal" aria-labelledby="modal-titre">
+    <form id="formulaire">
+      <div class="modal__header">
+        <h2 id="modal-titre">Ajouter une note</h2>
+        <button type="button" class="modal__fermer" id="fermer-modal" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal__contenu">
+        <label for="titre">Titre</label>
+        <input id="titre" name="titre" type="text" placeholder="Ex. : Courses de la semaine" maxlength="100" required>
+        <label for="contenu">Note</label>
+        <textarea id="contenu" name="contenu" rows="5" placeholder="Écris ta note ici…" maxlength="5000" required></textarea>
+      </div>
+      <div class="modal__actions">
+        <button type="button" class="btn-annuler" id="annuler-modal">Annuler</button>
+        <button type="submit" class="btn-enregistrer">Ajouter la note</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="../../controller/bloc-note.js"></script>
 </body>
 </html>

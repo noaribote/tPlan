@@ -1,3 +1,24 @@
 nav {
     position: absolute;
+    top: 10px; left: 10px;
+    z-index: 99 !important;
+}
+
+nav button {
+    margin: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    box-shadow: var(--boxshadow);
+    background: #1f7a63;
+    transition: 0.2s ease-in-out;
+}
+
+nav button:hover { cursor: pointer; }
+nav button:focus { transform: scale(0.9); }
+
+nav button i {
+    color: white;
+    font-size: 20px;
 }

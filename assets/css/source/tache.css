@@ -1,13 +1,13 @@
-/* ============ Variables ============ */
+@import url('media.css');
 :root {
   --bg: white;
   --surface: #ffffff;
   --ink: #1b2430;
   --muted: #5e6b7a;
   --line: #d5dbe2;
-  --accent: #0e6e6e;
+  --accent: #1f7a63;
   --accent-dark: #0a5555;
-  --accent-soft: #dcefee;
+  --accent-soft: #e8f7f2;
 
   --prio-standard: #9aa3ae;
   --prio-moyen: #e8b923;
@@ -82,7 +82,7 @@ main {
 }
 
 .btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-dark); }
+.btn-primary:hover {  filter: brightness(1.12); }
 
 .btn-ghost {
   background: transparent;
@@ -265,7 +265,7 @@ main {
 .modal form {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
 }
 
 .modal-head,
@@ -283,6 +283,7 @@ main {
   gap: 1.1rem;
   padding: 1.25rem;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* ============ Formulaire ============ */
@@ -368,14 +369,32 @@ textarea { resize: vertical; }
 .comment-field { display: flex; align-items: center; gap: 0.4rem; }
 #add-comment { justify-self: start; }
 
-/* ============ Responsive ============ */
 @media (max-width: 560px) {
-  .app-header h1 { font-size: 1.5rem; }
-  .task-head { flex-wrap: wrap; }
+  .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+  }
+
+  .app-header .btn { width: 100%; }
+
+  .modal {
+    width: calc(100% - 1rem);
+    max-height: calc(100dvh - 1rem);
+    border-radius: 12px;
+  }
+
+  .modal form { max-height: calc(100dvh - 1rem); }
+  .modal-head, .modal-foot { padding: 0.85rem 1rem; }
+  .modal-body { gap: 0.9rem; padding: 1rem; }
+  .optional { padding: 0.75rem; }
   .date-grid { grid-template-columns: 1fr; }
   .modal-foot .btn { flex: 1; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+@media (max-width: 360px) {
+  .modal-head h2 { font-size: 1.1rem; }
+  .modal-foot { gap: 0.4rem; }
+  .modal-foot .btn { padding-inline: 0.6rem; }
 }

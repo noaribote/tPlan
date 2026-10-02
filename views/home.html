@@ -10,14 +10,32 @@
 </head>
 <body>
     <nav>
-        <button><i class="fa-solid fa-bars"></i></button>
+        <button><i class="fa-solid fa-bars-staggered"></i></button>
     </nav>
     <main class="FlexCenter">
         
         <div class="PlacementIframes">
-            <div class="iframe-tile left" data-id="agenda"><div class="tile-controls"><button class="drag-handle" type="button" aria-label="Déplacer Agenda" title="Déplacer">⠿</button><button class="expand-tile" type="button" aria-label="Agrandir Agenda" title="Agrandir">⛶</button></div><iframe title="Agenda" src="./source/agenda.html" loading="lazy" allowfullscreen=""></iframe></div>
-            <div class="iframe-tile top-right" data-id="taches"><div class="tile-controls"><button class="drag-handle" type="button" aria-label="Déplacer Tâches" title="Déplacer">⠿</button><button class="expand-tile" type="button" aria-label="Agrandir Tâches" title="Agrandir">⛶</button></div><iframe title="Tâches" src="./source/tache.html" loading="lazy" allowfullscreen=""></iframe></div>
-            <div class="iframe-tile bottom-right" data-id="bloc-note"><div class="tile-controls"><button class="drag-handle" type="button" aria-label="Déplacer Pense-bête" title="Déplacer">⠿</button><button class="expand-tile" type="button" aria-label="Agrandir Pense-bête" title="Agrandir">⛶</button></div><iframe title="Pense-bête" src="./source/bloc-note.html" loading="lazy" allowfullscreen=""></iframe></div>
+            <div class="iframe-tile left" data-id="agenda">
+                <div class="tile-controls">
+                    <button class="drag-handle" type="button" aria-label="Déplacer Agenda" title="Déplacer"><i class="fa-solid fa-grip"></i></button>
+                    <button class="expand-tile" type="button" aria-label="Agrandir Agenda" title="Agrandir"><i class="fa-solid fa-expand"></i></button>
+                </div>
+                <iframe title="Agenda" src="./source/agenda.html" loading="lazy" allowfullscreen=""></iframe>
+            </div>
+            <div class="iframe-tile top-right" data-id="taches">
+                <div class="tile-controls">
+                    <button class="drag-handle" type="button" aria-label="Déplacer Tâches" title="Déplacer"><i class="fa-solid fa-grip"></i></button>
+                    <button class="expand-tile" type="button" aria-label="Agrandir Tâches" title="Agrandir"><i class="fa-solid fa-expand"></i></button>
+                </div>
+                <iframe title="Tâches" src="./source/tache.html" loading="lazy" allowfullscreen=""></iframe>
+            </div>
+            <div class="iframe-tile bottom-right" data-id="bloc-note">
+                <div class="tile-controls">
+                    <button class="drag-handle" type="button" aria-label="Déplacer Pense-bête" title="Déplacer"><i class="fa-solid fa-grip"></i></button>
+                    <button class="expand-tile" type="button" aria-label="Agrandir Pense-bête" title="Agrandir"><i class="fa-solid fa-expand"></i></button>
+                </div>
+                <iframe title="Pense-bête" src="./source/bloc-note.html" loading="lazy" allowfullscreen=""></iframe>
+            </div>
         </div>
 
     </main>
@@ -26,7 +44,7 @@
             <input id="lienSpotify" placeholder="Lien Playlist">
             <iframe id="playerSpotify" title="Lecteur Spotify" allow="encrypted-media" loading="lazy"></iframe>
         </div>
-        <button id="toggleEditMode" type="button" aria-label="Activer le mode éditeur" aria-pressed="false" style="background: rgb(255, 208, 0);"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button id="toggleEditMode" type="button" aria-label="Activer le mode éditeur" aria-pressed="false" style="background: #1f7a63;"><i class="fa-solid fa-pen-to-square"></i></button>
         <button id="toggleSpotify" type="button" aria-label="Afficher Spotify" aria-expanded="false" style="background: black;"><i class="cib-spotify"></i></button>
     </footer>
 </body>

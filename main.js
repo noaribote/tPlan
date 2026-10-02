@@ -17,7 +17,7 @@ function createWindow() {
     },
   });
   Menu.setApplicationMenu(null);
-  mainWindow.setIcon(path.join(__dirname, 'assets/image/tplan_logo.ico'));
+  mainWindow.setIcon(path.join(__dirname, 'assets/image/logo_sans_background-bordure-bold.ico'));
   mainWindow.loadFile('views/home.html');
   mainWindow.webContents.openDevTools();
 }

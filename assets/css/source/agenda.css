@@ -1,6 +1,7 @@
 :root {
   --bg: #f6f7f9; --card: #fff; --text: #1f2430; --muted: #7a8190; --line: #e3e6ec;
-  --pro: #2f6fed; --perso: #f08a24; --today: #e8f0ff;
+  --pro: #2f6fed; --perso: #b66009; --today: #e8f0ff;
+  --accent: #1f7a63;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -66,7 +67,7 @@ button:hover { background: var(--bg); }
 /* Vue année */
 .year-view { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .mini { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px; cursor: pointer; }
-.mini:hover { border-color: var(--pro); }
+.mini:hover { border-color: var(--accent); }
 .mini h3 { margin: 0 0 4px; font-size: .95rem; text-transform: capitalize; }
 .mini .dow-row div { font-size: .6rem; padding: 0; }
 .mini .d { text-align: center; font-size: .72rem; padding: 2px 0; position: relative; }

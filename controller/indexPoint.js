@@ -39,7 +39,7 @@ toggleEditMode.addEventListener("click", () => {
     grille.classList.toggle("edit-mode", modeEdition);
     toggleEditMode.setAttribute("aria-pressed", String(modeEdition));
     toggleEditMode.setAttribute("aria-label", modeEdition ? "Terminer la modification" : "Activer le mode éditeur");
-    toggleEditMode.style.background = modeEdition ? "#1ed760" : "rgb(255, 208, 0)";
+    toggleEditMode.style.background = modeEdition ? "#1ed760" : "#1f7a63";
     toggleEditMode.title = modeEdition ? "Terminer la modification" : "Activer le mode éditeur";
 });
 
@@ -48,7 +48,7 @@ grille.querySelectorAll(".iframe-tile").forEach((tile) => {
         const isExpanded = tile.classList.toggle("expanded");
         grille.classList.toggle("has-expanded", isExpanded);
         const button = tile.querySelector(".expand-tile");
-        button.textContent = isExpanded ? "⤢" : "⛶";
+        button.innerHTML = isExpanded ? '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>' : '<i class="fa-solid fa-expand"></i>';
         button.title = isExpanded ? "Réduire" : "Agrandir";
         button.setAttribute("aria-label", `${isExpanded ? "Réduire" : "Agrandir"} ${tile.querySelector("iframe").title}`);
     });
@@ -75,7 +75,7 @@ grille.querySelectorAll(".iframe-tile").forEach((tile) => {
             const classeCible = [...cible.classList].find((name) => ["left", "top-right", "bottom-right"].includes(name));
             tile.classList.replace(classeDepart, classeCible);
             cible.classList.replace(classeCible, classeDepart);
-            localStorage.setItem("ordreIframes", JSON.stringify([...grille.querySelectorAll(".iframe-tile")].map((item) => item.dataset.id)));
+            sauvegarderPositions();
             window.setTimeout(() => tile.classList.remove("drop-settling"), 280);
         }
         tile.classList.remove("dragging");
@@ -86,14 +86,27 @@ grille.querySelectorAll(".iframe-tile").forEach((tile) => {
     tile.querySelector(".drag-handle").addEventListener("pointercancel", terminerDeplacement);
 });
 
-try {
-    const ordre = JSON.parse(localStorage.getItem("ordreIframes") || "[]");
-    ordre.forEach((id) => {
-        const tile = grille.querySelector(`.iframe-tile[data-id="${id}"]`);
-        if (!tile) return;
-        const classeDepart = [...tile.classList].find((name) => ["left", "top-right", "bottom-right"].includes(name));
-        const index = ordre.indexOf(id);
-        const classes = ["left", "top-right", "bottom-right"];
-        if (classes[index]) tile.classList.replace(classeDepart, classes[index]);
+const POSITIONS = ["left", "top-right", "bottom-right"];
+
+function sauvegarderPositions() {
+    const positions = {};
+    grille.querySelectorAll(".iframe-tile").forEach((tile) => {
+        positions[tile.dataset.id] = POSITIONS.find((name) => tile.classList.contains(name));
     });
-} catch { localStorage.removeItem("ordreIframes"); }
+    localStorage.setItem("positionsIframes", JSON.stringify(positions));
+}
+
+try {
+    const positionsSauvegardees = JSON.parse(localStorage.getItem("positionsIframes") || "null");
+    if (positionsSauvegardees && typeof positionsSauvegardees === "object" && !Array.isArray(positionsSauvegardees)) {
+        grille.querySelectorAll(".iframe-tile").forEach((tile) => {
+            const classe = positionsSauvegardees[tile.dataset.id];
+            if (POSITIONS.includes(classe)) {
+                POSITIONS.forEach((position) => tile.classList.remove(position));
+                tile.classList.add(classe);
+            }
+        });
+    }
+} catch {
+    localStorage.removeItem("positionsIframes");
+}

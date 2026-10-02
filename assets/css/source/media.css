@@ -1,1 +1,16 @@
-/* @media screen and (max-width: px) {  } */
+@media (prefers-reduced-motion: reduce) { .PlacementIframes > .iframe-tile, .tile-controls { transition: none; } }
+@media (max-width: 800px) {
+  .year-view { grid-template-columns: repeat(2, 1fr); }
+  .week-view { grid-template-columns: 1fr; overflow-y: auto; }
+}
+
+@media (max-width: 560px) {
+  .app-header h1 { font-size: 1.5rem; }
+  .task-head { flex-wrap: wrap; }
+  .date-grid { grid-template-columns: 1fr; }
+  .modal-foot .btn { flex: 1; }
+}
+
+/* @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+} */
