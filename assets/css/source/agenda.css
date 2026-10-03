@@ -85,8 +85,3 @@ button:hover { background: var(--bg); }
 .zoombar button { width: 36px; height: 36px; padding: 0; font-size: 1.3rem; line-height: 1; border-radius: 50%; }
 .zoombar button:disabled { opacity: .35; cursor: default; }
 #view-label { min-width: 80px; text-align: center; font-size: .9rem; color: var(--muted); text-transform: capitalize; }
-
-@media (max-width: 800px) {
-  .year-view { grid-template-columns: repeat(2, 1fr); }
-  .week-view { grid-template-columns: 1fr; overflow-y: auto; }
-}

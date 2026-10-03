@@ -1,4 +1,3 @@
-@import url('media.css');
 :root {
   --bg: white;
   --surface: #ffffff;
@@ -368,33 +367,3 @@ textarea { resize: vertical; }
 .comment-fields:empty { display: none; }
 .comment-field { display: flex; align-items: center; gap: 0.4rem; }
 #add-comment { justify-self: start; }
-
-@media (max-width: 560px) {
-  .app-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding-top: 1.25rem;
-  }
-
-  .app-header .btn { width: 100%; }
-
-  .modal {
-    width: calc(100% - 1rem);
-    max-height: calc(100dvh - 1rem);
-    border-radius: 12px;
-  }
-
-  .modal form { max-height: calc(100dvh - 1rem); }
-  .modal-head, .modal-foot { padding: 0.85rem 1rem; }
-  .modal-body { gap: 0.9rem; padding: 1rem; }
-  .optional { padding: 0.75rem; }
-  .date-grid { grid-template-columns: 1fr; }
-  .modal-foot .btn { flex: 1; }
-}
-
-@media (max-width: 360px) {
-  .modal-head h2 { font-size: 1.1rem; }
-  .modal-foot { gap: 0.4rem; }
-  .modal-foot .btn { padding-inline: 0.6rem; }
-}
