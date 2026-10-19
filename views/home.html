@@ -7,11 +7,35 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/all.min.css">
+    <script src="../controller/personnalisation.js" defer></script>
 </head>
 <body>
-    <nav>
-        <button><i class="fa-solid fa-bars-staggered"></i></button>
+    <nav id="baredenavigation">
+        <button id="ouvrirPersonnalisation" type="button" aria-label="Personnaliser la page" aria-haspopup="dialog" aria-controls="personnalisation" aria-expanded="false"><i class="fa-solid fa-bars-staggered" aria-hidden="true"></i></button>
     </nav>
+    <dialog id="personnalisation" aria-labelledby="personnalisationTitre">
+        <header class="preferences-header">
+            <div><h1 id="personnalisationTitre">Votre espace, votre style</h1><p>Personnalisez votre tableau de bord.</p></div>
+            <button id="fermerPersonnalisation" type="button" aria-label="Fermer">×</button>
+        </header>
+        <fieldset>
+            <legend>Couleurs</legend>
+            <div class="preferences-options">
+                <button type="button" class="preference-choice" data-theme-choice="clair" aria-pressed="true"><span class="preference-preview preview-clair" aria-hidden="true"></span>Claire</button>
+                <button type="button" class="preference-choice" data-theme-choice="sombre" aria-pressed="false"><span class="preference-preview preview-sombre" aria-hidden="true"></span>Sombre</button>
+                <button type="button" class="preference-choice" data-theme-choice="vintage" aria-pressed="false"><span class="preference-preview preview-vintage" aria-hidden="true"></span>Vintage</button>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Disposition des blocs</legend>
+            <div class="preferences-options">
+                <button type="button" class="preference-choice" data-grid-choice="actuel" aria-pressed="true"><span class="preference-preview preview-actuel" aria-hidden="true"></span>Actuelle</button>
+                <button type="button" class="preference-choice" data-grid-choice="inverse" aria-pressed="false"><span class="preference-preview preview-inverse" aria-hidden="true"></span>Inversée</button>
+                <button type="button" class="preference-choice" data-grid-choice="colonnes" aria-pressed="false"><span class="preference-preview preview-colonnes" aria-hidden="true"></span>Trois colonnes</button>
+            </div>
+        </fieldset>
+        <p class="preferences-hint" id="preferencesStatut" role="status">Vos choix sont enregistrés automatiquement.</p>
+    </dialog>
     <main class="FlexCenter">
         
         <div class="PlacementIframes">
