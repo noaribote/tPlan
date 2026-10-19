@@ -35,7 +35,7 @@
     border-radius: 14px;
   }
 
-  .PlacementIframes > .iframe-tile.expanded { inset: 12px; }
+  .PlacementIframes > .iframe-tile.expanded { position: fixed; inset: 12px; }
 
   .tile-controls {
     opacity: 1;

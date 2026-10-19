@@ -1,4 +1,5 @@
 main {
+    position: relative;
     height: 100%; width: 100%;
     background: var(--bg-color-white);
 }
@@ -42,8 +43,10 @@ main {
 .PlacementIframes.edit-mode .drag-handle { display: inline-block; }
 .PlacementIframes.edit-mode .drag-handle:active { cursor: grabbing !important; }
 .expand-tile { font-size: 20px; }
-.PlacementIframes.has-expanded::before { content: ""; position: fixed; inset: 0; z-index: 5; background: rgba(0, 0, 0, .58); }
-.PlacementIframes > .iframe-tile.expanded { position: fixed; inset: 6vh 6vw; z-index: 6; grid-area: auto; box-shadow: 0 20px 70px #0005; }
+/* Le main devient le repère du panneau agrandi, sans confinement par le flou de la grille. */
+.PlacementIframes.has-expanded { position: static; backdrop-filter: none; }
+main.has-expanded::before { content: ""; position: absolute; inset: 0; z-index: 5; background: rgba(0, 0, 0, .58); cursor: pointer; }
+.PlacementIframes > .iframe-tile.expanded { position: absolute; inset: 6%; z-index: 6; grid-area: auto; box-shadow: 0 20px 70px #0005; }
 .PlacementIframes > .iframe-tile.drop-settling { animation: tile-settle 280ms cubic-bezier(.2,.8,.2,1); }
 @keyframes tile-settle { 0% { transform: scale(.96); } 55% { transform: scale(1.025); } 100% { transform: scale(1); } }
 .iframe-tile.expanded > iframe { border-radius: 16px; }

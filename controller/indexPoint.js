@@ -30,6 +30,7 @@ if (lienSauvegarde) {
 }
 
 const grille = document.querySelector(".PlacementIframes");
+const main = grille.closest("main");
 const toggleEditMode = document.getElementById("toggleEditMode");
 let modeEdition = false;
 let tuileDeplacee = null;
@@ -43,14 +44,29 @@ toggleEditMode.addEventListener("click", () => {
     toggleEditMode.title = modeEdition ? "Terminer la modification" : "Activer le mode éditeur";
 });
 
-grille.querySelectorAll(".iframe-tile").forEach((tile) => {
-    tile.querySelector(".expand-tile").addEventListener("click", () => {
-        const isExpanded = tile.classList.toggle("expanded");
-        grille.classList.toggle("has-expanded", isExpanded);
+function definirPleinEcran(tile, isExpanded) {
+        tile.classList.toggle("expanded", isExpanded);
+        const panneauOuvert = Boolean(grille.querySelector(".iframe-tile.expanded"));
+        grille.classList.toggle("has-expanded", panneauOuvert);
+        main.classList.toggle("has-expanded", panneauOuvert);
         const button = tile.querySelector(".expand-tile");
         button.innerHTML = isExpanded ? '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>' : '<i class="fa-solid fa-expand"></i>';
         button.title = isExpanded ? "Réduire" : "Agrandir";
         button.setAttribute("aria-label", `${isExpanded ? "Réduire" : "Agrandir"} ${tile.querySelector("iframe").title}`);
+}
+
+main.addEventListener("click", (event) => {
+    // Un clic sur le pseudo-élément ::before cible son parent main.
+    if (event.target !== main) return;
+    const tile = grille.querySelector(".iframe-tile.expanded");
+    if (tile) definirPleinEcran(tile, false);
+});
+
+grille.querySelectorAll(".iframe-tile").forEach((tile) => {
+    tile.querySelector(".expand-tile").addEventListener("click", () => {
+        const isExpanded = !tile.classList.contains("expanded");
+        grille.querySelectorAll(".iframe-tile.expanded").forEach((item) => definirPleinEcran(item, false));
+        definirPleinEcran(tile, isExpanded);
     });
 
     tile.querySelector(".drag-handle").addEventListener("pointerdown", (event) => {
