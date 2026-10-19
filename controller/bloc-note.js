@@ -1,6 +1,5 @@
 "use strict";
 
-    const STORAGE_KEY = "notes";
     const list = document.getElementById("liste");
     const count = document.getElementById("compteur");
     const emptyState = document.getElementById("empty-state");
@@ -11,22 +10,20 @@
     const modalTitle = document.getElementById("modal-titre");
     const submitButton = form.querySelector('[type="submit"]');
     let editingId = null;
-    let notes = loadNotes();
+    let notes = [];
+    let notesReady;
 
-    function loadNotes() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        return Array.isArray(saved) ? saved : [];
-      } catch {
-        return [];
-      }
+    async function loadNotes() {
+      const saved = await window.tplanData.read("notes");
+      return Array.isArray(saved) ? saved : [];
     }
 
-    function saveNotes() {
+    async function saveNotes() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+        await window.tplanData.write("notes", notes);
       } catch (error) {
         console.error("Impossible d'enregistrer les notes :", error);
+        throw error;
       }
     }
 
@@ -62,8 +59,7 @@
         remove.textContent = "Supprimer";
         remove.addEventListener("click", () => {
           notes = notes.filter((item) => item.id !== note.id);
-          saveNotes();
-          renderNotes();
+          saveNotes().then(renderNotes).catch(error => alert("La suppression de la note a ?chou? : " + error.message));
         });
 
         actions.append(edit, remove);
@@ -73,6 +69,7 @@
     }
 
     function openModal(note = null) {
+      if (!notesReady) return;
       form.reset();
       editingId = note?.id ?? null;
       modalTitle.textContent = editingId ? "Modifier la note" : "Ajouter une note";
@@ -92,7 +89,7 @@
       if (event.target === modal) modal.close();
     });
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const title = titleInput.value.trim();
       const content = contentInput.value.trim();
@@ -105,9 +102,13 @@
       } else {
         notes.unshift({ id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`, title, content, updatedAt: timestamp });
       }
-      saveNotes();
-      renderNotes();
-      modal.close();
+      try {
+        await saveNotes();
+        renderNotes();
+        modal.close();
+      } catch (error) {
+        alert("?chec d?enregistrement de model/notes.json : " + (error.message || String(error)));
+      }
     });
 
-    renderNotes();
+    notesReady = loadNotes().then((saved) => { notes = saved; renderNotes(); }).catch(async error => { console.error("Notes load failed", error); let details = error.message || String(error); try { details += "\n" + JSON.stringify(await window.tplanData.diagnose()); } catch (diagnosticError) { details += "\nAPI diagnostic unavailable: " + diagnosticError.message; } alert("Impossible de lire les notes :\n" + details); });

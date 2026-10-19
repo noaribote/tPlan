@@ -6,21 +6,15 @@
     const grille = document.querySelector(".PlacementIframes");
     const statut = document.getElementById("preferencesStatut");
     const stylesheet = new URL("../assets/css/nav.css", document.baseURI).href;
-    let theme = lire("tplan-theme", themes, "clair");
+    let preferences = { theme: "clair", grid: "actuel", positions: {} };
+    let theme = "clair";
 
-    function lire(cle, valeurs, defaut) {
+    async function enregistrer() {
         try {
-            const valeur = localStorage.getItem(cle);
-            return valeurs.includes(valeur) ? valeur : defaut;
-        } catch { return defaut; }
-    }
-
-    function enregistrer(cle, valeur) {
-        try {
-            localStorage.setItem(cle, valeur);
-            statut.textContent = "Vos choix sont enregistrés automatiquement.";
+            await window.tplanData.write("preferences", preferences);
+            statut.textContent = "Vos choix sont enregistr?s automatiquement.";
         } catch {
-            statut.textContent = "Choix appliqué. Le stockage local est indisponible : il ne sera pas conservé après fermeture.";
+            statut.textContent = "Impossible d?enregistrer les pr?f?rences.";
         }
     }
 
@@ -61,8 +55,12 @@
     grille.querySelectorAll("iframe").forEach((iframe) => {
         iframe.addEventListener("load", () => appliquerIframe(iframe));
     });
-    appliquerTheme(theme);
-    appliquerGrille(lire("tplan-grid", dispositions, "actuel"));
+    window.tplanData.read("preferences").then(saved => {
+        preferences = { ...preferences, ...(saved || {}) };
+        theme = themes.includes(preferences.theme) ? preferences.theme : "clair";
+        appliquerTheme(theme);
+        appliquerGrille(dispositions.includes(preferences.grid) ? preferences.grid : "actuel");
+    });
 
     ouvrir.addEventListener("click", () => {
         if (!dialogue.open) dialogue.showModal();
@@ -81,13 +79,15 @@
     dialogue.querySelectorAll("[data-theme-choice]").forEach((bouton) => {
         bouton.addEventListener("click", () => {
             appliquerTheme(bouton.dataset.themeChoice);
-            enregistrer("tplan-theme", theme);
+            preferences.theme = theme;
+            enregistrer();
         });
     });
     dialogue.querySelectorAll("[data-grid-choice]").forEach((bouton) => {
         bouton.addEventListener("click", () => {
             appliquerGrille(bouton.dataset.gridChoice);
-            enregistrer("tplan-grid", bouton.dataset.gridChoice);
+            preferences.grid = bouton.dataset.gridChoice;
+            enregistrer();
         });
     });
 })();
