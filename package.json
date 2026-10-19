@@ -14,12 +14,12 @@
       "target": [
         "nsis"
       ],
-      "icon": "icon.ico"
+      "icon": "icon.png"
     },
     "nsis": {
       "oneClick": false,
-      "installerIcon": "icon.ico",
-      "uninstallerIcon": "icon.ico",
+      "installerIcon": "icon.png",
+      "uninstallerIcon": "icon.png",
       "uninstallDisplayName": "tPlan",
       "license": "license.md",
       "allowToChangeInstallationDirectory": true
