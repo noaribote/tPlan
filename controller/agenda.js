@@ -2,7 +2,6 @@
    CONFIG : adapte ces noms à la structure de tes tâches
    ============================================================ */
 const CONFIG = {
-  storageKey: 'tasks',          // clé du localStorage (tableau JSON de tâches)
   fields: {
     title: 'title',             // nom de la tâche
     category: 'category',       // "Professionnel" ou "Personnel"
@@ -33,17 +32,11 @@ const DOW = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const monthName = (y, m) => new Date(y, m, 1).toLocaleDateString('fr-FR', { month: 'long' });
 
 /* ---------- Tâches : lecture + placement par jour ---------- */
-function loadTasks() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(CONFIG.storageKey) || '[]');
-    return Array.isArray(raw) ? raw : Object.values(raw);
-  } catch (e) { return []; }
-}
-
+let cachedTasks = [];
 // Retourne { "YYYY-MM-DD": [ {title, cat}, ... ] }
 function buildIndex() {
   const f = CONFIG.fields, index = {};
-  loadTasks().forEach(t => {
+  cachedTasks.forEach(t => {
     const start = parse(t[f.start]), end = parse(t[f.end]), dl = parse(t[f.deadline]);
     const days = new Set();                         // Set = jamais deux fois la même tâche le même jour
     if (start && end) {
@@ -185,6 +178,7 @@ $('calendar').addEventListener('wheel', e => {
 }, { passive: false });
 
 // Se met à jour si les tâches changent dans un autre onglet
-window.addEventListener('storage', e => { if (e.key === CONFIG.storageKey) render(); });
 
-render();
+
+window.tplanData.read('tasks').then(raw => { cachedTasks = Array.isArray(raw) ? raw : Object.values(raw || {}); render(); });
+window.tplanData.onTasksChanged?.(tasks => { cachedTasks = Array.isArray(tasks) ? tasks : []; render(); });

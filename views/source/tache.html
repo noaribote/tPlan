@@ -23,63 +23,11 @@
     </p>
 
     <!-- Les tâches seront injectées ici par le JS (déjà triées : deadline, puis priorité) -->
-    <ul class="task-list" id="task-list">
-
-      <!-- EXEMPLE 1 : tâche avec commentaires (à supprimer quand le JS sera en place) -->
-      <li class="task priority-urgent">
-        <div class="task-head">
-          <span class="priority-square" title="Priorité : urgent"></span>
-          <h2 class="task-title">Préparer la réunion client</h2>
-          <span class="badge badge-pro">Professionnel</span>
-        </div>
-        <p class="task-desc">Rassembler les chiffres du trimestre et finaliser le support.</p>
-
-        <dl class="task-dates">
-          <div><dt>Début</dt><dd>01/10/2026</dd></div>
-          <div><dt>Fin</dt><dd>09/10/2026</dd></div>
-          <div class="is-deadline"><dt>Deadline</dt><dd>10/10/2026</dd></div>
-        </dl>
-
-        <div class="progress">
-          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" aria-label="Avancement de la tâche">
-            <div class="progress-fill" style="width: 40%"></div>
-          </div>
-          <span class="progress-value">40 %</span>
-        </div>
-
-        <ul class="checklist">
-          <li><label><input type="checkbox" checked><span>Récupérer les chiffres</span></label></li>
-          <li><label><input type="checkbox" checked><span>Créer le plan</span></label></li>
-          <li><label><input type="checkbox"><span>Rédiger les slides</span></label></li>
-          <li><label><input type="checkbox"><span>Relire avec l'équipe</span></label></li>
-          <li><label><input type="checkbox"><span>Envoyer l'invitation</span></label></li>
-        </ul>
-
-        <div class="task-foot">
-          <!-- Caché (attribut hidden) tant que la progression n'est pas à 100 % -->
-          <button type="button" class="btn btn-validate" hidden>Valider la tâche</button>
-        </div>
-      </li>
-
-      <!-- EXEMPLE 2 : tâche sans commentaire (pas de barre, bouton toujours visible) -->
-      <li class="task priority-standard">
-        <div class="task-head">
-          <span class="priority-square" title="Priorité : standard"></span>
-          <h2 class="task-title">Acheter un cadeau</h2>
-          <span class="badge badge-perso">Personnel</span>
-        </div>
-        <p class="task-desc">Anniversaire de Marie, penser à la carte.</p>
-        <div class="task-foot">
-          <button type="button" class="btn btn-validate">Valider la tâche</button>
-        </div>
-      </li>
-
-    </ul>
-  </main>
+    <ul class="task-list" id="task-list"></ul>
 
   <!-- ===== Fenêtre modale : ajout d'une tâche ===== -->
   <dialog class="modal" id="task-modal" aria-labelledby="modal-title">
-    <form id="task-form" method="dialog">
+    <form id="task-form">
       <div class="modal-head">
         <h2 id="modal-title">Nouvelle tâche</h2>
         <button type="button" class="btn-icon" id="close-modal" aria-label="Fermer">×</button>

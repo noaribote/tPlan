@@ -10,6 +10,6 @@ export function chargerSpotify(url) {
     parsed.pathname = `/embed/${parts.join("/")}`;
     parsed.search = "";
     player.src = parsed.toString();
-    localStorage.setItem("spotify", url.trim());
+    window.tplanData.read("app").then(data => window.tplanData.write("app", { ...data, spotify: url.trim() })).catch(console.error);
     return true;
 }

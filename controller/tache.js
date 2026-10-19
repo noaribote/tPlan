@@ -1,12 +1,10 @@
 "use strict";
 
 /* ============================================================
-   Gestionnaire de tâches
-   - Données stockées dans le Local Storage (clé "tasks")
+   Gestionnaire de tâches : un fichier JSON dédié
    - Tri : deadline (sans deadline en dernier), puis priorité
    ============================================================ */
 
-const STORAGE_KEY = "tasks";
 const PRIORITY_ORDER = { urgent: 0, moyen: 1, standard: 2 };
 const PRIORITY_LABEL = { urgent: "Urgent", moyen: "Moyen", standard: "Standard" };
 const CATEGORY_LABEL = { professionnel: "Professionnel", personnel: "Personnel" };
@@ -24,25 +22,16 @@ const startInput = document.getElementById("task-start");
 const endInput = document.getElementById("task-end");
 const deadlineInput = document.getElementById("task-deadline");
 
-/* ---------- Local Storage ---------- */
-function loadTasks() {
-  try {
-    const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
-  }
+/* ---------- Fichier JSON ---------- */
+async function loadTasks() {
+  const data = await window.tplanData.read("tasks");
+  return Array.isArray(data) ? data : [];
 }
 
-function saveTasks() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-  } catch (error) {
-    console.error("Impossible d'enregistrer les tâches :", error);
-  }
-}
+function saveTasks() { return window.tplanData.write("tasks", tasks); }
 
-let tasks = loadTasks();
+let tasks = [];
+let tasksReady;
 
 /* ---------- Utilitaires ---------- */
 function newId() {
@@ -58,9 +47,9 @@ function formatDate(iso) {
 }
 
 function getProgress(task) {
-  const total = task.comments.length;
+  const total = (task.comments || []).length;
   if (total === 0) return null;
-  const done = task.comments.filter((c) => c.done).length;
+  const done = (task.comments || []).filter((c) => c.done).length;
   return Math.round((done / total) * 100);
 }
 
@@ -125,11 +114,11 @@ function createTaskElement(task) {
 
   // Commentaires cochables + barre de progression
   const checklist = li.querySelector(".checklist");
-  if (task.comments.length === 0) {
+  if ((task.comments || []).length === 0) {
     checklist.remove();
     li.querySelector(".progress").remove();
   } else {
-    task.comments.forEach((comment, index) => {
+    (task.comments || []).forEach((comment, index) => {
       const item = document.createElement("li");
       const label = document.createElement("label");
       const checkbox = document.createElement("input");
@@ -163,18 +152,25 @@ taskList.addEventListener("change", (event) => {
   if (!task) return;
 
   task.comments[Number(checkbox.dataset.index)].done = checkbox.checked;
-  saveTasks();
+  saveTasks().catch(console.error);
   updateProgress(li, task);
 });
 
-taskList.addEventListener("click", (event) => {
+taskList.addEventListener("click", async (event) => {
   const button = event.target.closest(".btn-validate");
   if (!button) return;
 
   const li = button.closest(".task");
-  tasks = tasks.filter((t) => t.id !== li.dataset.id); // suppression définitive
-  saveTasks();
-  renderTasks();
+  const previousTasks = tasks;
+  tasks = tasks.filter((task) => task.id !== li.dataset.id);
+  try {
+    await saveTasks();
+    renderTasks();
+  } catch (error) {
+    tasks = previousTasks;
+    renderTasks();
+    alert("?chec d?enregistrement de model/tasks.json : " + (error.message || String(error)));
+  }
 });
 
 /* ---------- Fenêtre modale ---------- */
@@ -185,6 +181,7 @@ function addCommentField() {
 }
 
 function openModal() {
+  if (!tasksReady) return;
   form.reset();
   checkDates();
   commentFields.replaceChildren();
@@ -234,7 +231,7 @@ endInput.addEventListener("input", checkDates);
 deadlineInput.addEventListener("input", checkDates);
 
 /* ---------- Envoi du formulaire ---------- */
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   checkDates();
   if (!form.reportValidity()) return;
@@ -258,7 +255,7 @@ form.addEventListener("submit", (event) => {
     .filter((text) => text !== "")
     .map((text) => ({ text, done: false }));
 
-  tasks.push({
+  const task = {
     id: newId(),
     name: data.get("name").trim(),
     description: data.get("description").trim(),
@@ -268,12 +265,18 @@ form.addEventListener("submit", (event) => {
     end: data.get("end") || "",
     deadline: data.get("deadline") || "",
     comments,
-  });
-
-  saveTasks();
-  renderTasks();
-  modal.close();
+  };
+  tasks.push(task);
+  try {
+    await saveTasks();
+    renderTasks();
+    modal.close();
+  } catch (error) {
+    tasks = tasks.filter((item) => item.id !== task.id);
+    alert("?chec d?enregistrement de model/tasks.json : " + (error.message || String(error)));
+  }
 });
 
 /* ---------- Démarrage ---------- */
-renderTasks();
+tasksReady = loadTasks().then((saved) => { tasks = saved; renderTasks(); }).catch(async error => { console.error("Task load failed", error); let details = error.message || String(error); try { details += "\n" + JSON.stringify(await window.tplanData.diagnose()); } catch (diagnosticError) { details += "\nAPI diagnostic unavailable: " + diagnosticError.message; } alert("Impossible de lire les t?ches :\n" + details); });
+window.tplanData.onTasksChanged?.(saved => { tasks = Array.isArray(saved) ? saved : []; renderTasks(); });

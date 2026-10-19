@@ -23,11 +23,10 @@ lien.addEventListener("change", chargerDepuisChamp);
 lien.addEventListener("keydown", (event) => {
     if (event.key === "Enter") { event.preventDefault(); chargerDepuisChamp(); }
 });
-const lienSauvegarde = localStorage.getItem("spotify");
-if (lienSauvegarde) {
-    lien.value = lienSauvegarde;
-    chargerSpotify(lienSauvegarde);
-}
+const dataAPI = window.tplanData;
+dataAPI.read("app").then(data => {
+    if (data.spotify) { lien.value = data.spotify; chargerSpotify(data.spotify); }
+});
 
 const grille = document.querySelector(".PlacementIframes");
 const main = grille.closest("main");
@@ -109,11 +108,10 @@ function sauvegarderPositions() {
     grille.querySelectorAll(".iframe-tile").forEach((tile) => {
         positions[tile.dataset.id] = POSITIONS.find((name) => tile.classList.contains(name));
     });
-    localStorage.setItem("positionsIframes", JSON.stringify(positions));
+    dataAPI.read("preferences").then(prefs => dataAPI.write("preferences", { ...prefs, positions })).catch(console.error);
 }
 
-try {
-    const positionsSauvegardees = JSON.parse(localStorage.getItem("positionsIframes") || "null");
+dataAPI.read("preferences").then(({ positions: positionsSauvegardees } = {}) => {
     if (positionsSauvegardees && typeof positionsSauvegardees === "object" && !Array.isArray(positionsSauvegardees)) {
         grille.querySelectorAll(".iframe-tile").forEach((tile) => {
             const classe = positionsSauvegardees[tile.dataset.id];
@@ -123,6 +121,4 @@ try {
             }
         });
     }
-} catch {
-    localStorage.removeItem("positionsIframes");
-}
+}).catch(error => console.error("Impossible de charger les pr?f?rences :", error));
