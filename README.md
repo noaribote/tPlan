@@ -1,3 +1,9 @@
+# Avertissement relatif à l'usage de l'IA
+
+Ce logiciel a été conçu et pensé par l'Humain. Chacun de ses programmes a été créé de manière indépendante par les contributeurs.
+
+L'intelligence artificielle a toutefois constitué un atout majeur dans le développement de cette application. Elle a réutilisé l'ensemble des codes indépendants produits par les développeurs, ainsi que leurs instructions, afin de concevoir le logiciel "tPlan" avec les technologies choisies par ces derniers.
+
 # Lancer le projet (~10 minutes) :
 
 1) Installez Visual Studio Code
