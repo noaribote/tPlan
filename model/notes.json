@@ -1,32 +1,74 @@
 [
   {
-    "id": "38d8d40c-c470-44f7-b030-0a28431d460d",
-    "title": "dsqfqf",
-    "content": "sqdfdsfdsfq",
-    "updatedAt": "2026-10-19T13:15:51.986Z"
+    "id": "09f3a9a4-2794-4676-aed1-51c6a0f10b01",
+    "title": "Projet de site web",
+    "content": "Créer un petit site pour présenter mon portfolio. Prévoir une page d'accueil, une section projets et un formulaire de contact.",
+    "updatedAt": "2026-10-20T08:15:00.000Z"
   },
   {
-    "id": "f5f17843-8c93-4145-bf87-332d7d9e3868",
-    "title": "sqfsqdf",
-    "content": "sdqfsdfsd",
-    "updatedAt": "2026-10-19T13:15:48.333Z"
+    "id": "14b5c872-2fc1-4d8e-b372-e55f60e1c902",
+    "title": "Révision Python",
+    "content": "Revoir les listes, les dictionnaires, les boucles et les fonctions avant le contrôle de programmation.",
+    "updatedAt": "2026-10-19T16:42:00.000Z"
   },
   {
-    "id": "e058f501-5597-4fb1-a73c-f35a093dbadb",
-    "title": "dsfq",
-    "content": "sdqfsdf",
-    "updatedAt": "2026-10-19T13:15:45.318Z"
+    "id": "2c91f0d6-6a8e-47d0-a0b6-4d77209d3303",
+    "title": "Cours de bases de données",
+    "content": "Une clé primaire identifie chaque ligne. Une clé étrangère relie une table à une autre.",
+    "updatedAt": "2026-10-18T11:20:00.000Z"
   },
   {
-    "id": "66d10b72-a653-4acc-aa82-adf851492d4e",
-    "title": "ezr",
-    "content": "zrzerez",
-    "updatedAt": "2026-10-19T13:15:42.228Z"
+    "id": "3e3d7a62-8b4f-431c-91ee-90f5a2cb1404",
+    "title": "Idée d'application",
+    "content": "Développer une application simple pour suivre les devoirs, les dates limites et l'avancement des révisions.",
+    "updatedAt": "2026-10-17T14:05:00.000Z"
   },
   {
-    "id": "2cb2fbcb-871b-4489-af5b-0f093fabc520",
-    "title": "ezf",
-    "content": "dfgdfgsdf",
-    "updatedAt": "2026-10-19T13:15:24.874Z"
+    "id": "4a6fc3b1-54a6-4b71-90da-92e9fe405505",
+    "title": "TP réseau",
+    "content": "Tester la configuration d'une adresse IP et vérifier la connexion avec la commande ping.",
+    "updatedAt": "2026-10-16T09:35:00.000Z"
+  },
+  {
+    "id": "5b0ce8d4-38d4-4b4c-a2d0-c8b7c9d06606",
+    "title": "Projet en équipe",
+    "content": "Se répartir les tâches du mini-projet : interface, logique de l'application et documentation.",
+    "updatedAt": "2026-10-15T17:10:00.000Z"
+  },
+  {
+    "id": "6d7a10c2-2af1-441c-b7f3-75c1028bc707",
+    "title": "Révisions HTML et CSS",
+    "content": "Revoir la structure d'une page HTML, les sélecteurs CSS et la mise en page avec flexbox.",
+    "updatedAt": "2026-10-14T12:50:00.000Z"
+  },
+  {
+    "id": "70d9e34f-fcc8-4c90-89a5-9c6892859808",
+    "title": "Installation des outils",
+    "content": "Configurer l'éditeur de code, Git et l'environnement Python sur mon ordinateur portable.",
+    "updatedAt": "2026-10-13T15:25:00.000Z"
+  },
+  {
+    "id": "8e1a632b-70a7-47d1-a431-5aee639a4909",
+    "title": "Exercices d'algorithmique",
+    "content": "S'entraîner à parcourir un tableau, rechercher une valeur et calculer une moyenne.",
+    "updatedAt": "2026-10-12T10:40:00.000Z"
+  },
+  {
+    "id": "9f80b14e-c130-45c9-82d7-f3f28d772110",
+    "title": "Découverte de Git",
+    "content": "Utiliser git status, git add et git commit pour enregistrer les changements du projet.",
+    "updatedAt": "2026-10-11T13:00:00.000Z"
+  },
+  {
+    "id": "a2d93e75-4f43-4bda-bb71-ea060b2a8211",
+    "title": "Recherche de stage",
+    "content": "Repérer des stages de développement web adaptés à un étudiant débutant et préparer quelques projets à montrer.",
+    "updatedAt": "2026-10-10T18:30:00.000Z"
+  },
+  {
+    "id": "b3e4c7a1-9d2f-46b5-8a0c-71f239ad3212",
+    "title": "À demander au professeur",
+    "content": "Demander des précisions sur le prochain TP, les consignes du projet et les notions à réviser pour l'examen.",
+    "updatedAt": "2026-10-09T08:55:00.000Z"
   }
 ]
