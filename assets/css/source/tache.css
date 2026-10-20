@@ -86,6 +86,10 @@ main {
   transition: background-color 0.15s, border-color 0.15s;
 }
 
+.btn-danger { background: #b42318; color: #fff; }
+.btn-danger:hover { background: #912018; }
+.btn:disabled { opacity: 0.6; cursor: wait; }
+
 .btn-primary { background: var(--accent); color: #fff; }
 .btn-primary:hover {  filter: brightness(1.12); }
 
@@ -188,8 +192,16 @@ main {
 /* Barre de progression */
 .progress {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.35rem 0.75rem;
+}
+
+.progress-label {
+  flex-basis: 100%;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .progress-track {
@@ -242,6 +254,8 @@ main {
 
 .task-foot {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
   justify-content: flex-end;
 }
 .task-foot:empty,
@@ -379,3 +393,8 @@ textarea { resize: vertical; }
 .comment-fields:empty { display: none; }
 .comment-field { display: flex; align-items: center; gap: 0.4rem; }
 #add-comment { justify-self: start; }
+
+/* Garder la piste visible à 0 % dans le thème clair. */
+:root:not([data-theme="sombre"]):not([data-theme="vintage"]) .progress-track {
+  background: #e5e7eb;
+}
