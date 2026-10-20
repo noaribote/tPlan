@@ -1,25 +1,5 @@
 [
   {
-    "id": "1f847fb8-58e3-4b9d-83f1-c1a122f69a01",
-    "name": "Réviser les maths",
-    "description": "Revoir les intégrales et refaire les exercices du cours.",
-    "priority": "urgent",
-    "category": "professionnel",
-    "start": "2026-10-27",
-    "end": "2026-10-27",
-    "deadline": "2026-10-29",
-    "comments": [
-      {
-        "text": "Relire le chapitre",
-        "done": true
-      },
-      {
-        "text": "Faire les exercices",
-        "done": false
-      }
-    ]
-  },
-  {
     "id": "2e581a0c-32e8-4418-9075-a0a70ca14f67",
     "name": "Préparer l'exposé",
     "description": "Rassembler les sources et organiser la présentation d'histoire.",
@@ -37,27 +17,8 @@
         "text": "Créer les diapositives",
         "done": false
       }
-    ]
-  },
-  {
-    "id": "3a2c014e-69cd-4c77-8ad5-143f45ba73e8",
-    "name": "Rendre le rapport",
-    "description": "Finaliser le compte rendu du laboratoire de biologie.",
-    "priority": "urgent",
-    "category": "professionnel",
-    "start": "2026-11-02",
-    "end": "2026-11-01",
-    "deadline": "2026-11-05",
-    "comments": [
-      {
-        "text": "Vérifier les résultats",
-        "done": false
-      },
-      {
-        "text": "Relire la mise en page",
-        "done": false
-      }
-    ]
+    ],
+    "status": "in-progress"
   },
   {
     "id": "4b6a3a1d-b414-4a6d-b48b-57a163f520b3",
@@ -85,8 +46,8 @@
     "priority": "moyen",
     "category": "professionnel",
     "start": "2026-11-06",
-    "end": "2026-11-05",
-    "deadline": "2026-11-10",
+    "end": "2026-11-07",
+    "deadline": "2026-11-18",
     "comments": [
       {
         "text": "Revoir la liste de vocabulaire",
@@ -96,7 +57,8 @@
         "text": "Faire un quiz d'entraînement",
         "done": false
       }
-    ]
+    ],
+    "status": "in-progress"
   },
   {
     "id": "6d2e20a5-6ee2-47ef-8f39-3d6b3c680b15",

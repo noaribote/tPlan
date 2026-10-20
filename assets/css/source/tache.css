@@ -326,6 +326,54 @@ main {
   justify-content: flex-end;
 }
 
+.task-status {
+  position: relative;
+  margin-right: auto;
+}
+
+.task-status summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.task-status summary::-webkit-details-marker {
+  display: none;
+}
+
+.status-options {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.35rem);
+  z-index: 10;
+  min-width: 150px;
+  padding: 0.3rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px #0002;
+}
+
+.status-options button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  border: 0;
+  border-radius: 5px;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.status-options button:hover,
+.status-options button[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
 .task-foot:empty,
 .task-foot:has(> [hidden]:only-child) {
   display: none;

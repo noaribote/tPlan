@@ -9,6 +9,11 @@ const PRIORITY_ORDER = { urgent: 0, moyen: 1, standard: 2 };
 const PRIORITY_LABEL = { urgent: "Urgent", moyen: "Moyen", standard: "Standard" };
 const CATEGORY_LABEL = { professionnel: "Professionnel", personnel: "Personnel" };
 const CATEGORY_CLASS = { professionnel: "badge-pro", personnel: "badge-perso" };
+const STATUS_LABEL = { todo: "À faire", "in-progress": "En cours", done: "Terminé" };
+
+function getStatus(task) {
+  return Object.hasOwn(STATUS_LABEL, task.status) ? task.status : "todo";
+}
 
 /* ---------- Éléments du DOM ---------- */
 const taskList = document.getElementById("task-list");
@@ -90,12 +95,18 @@ function updateProgress(li, task) {
   li.querySelector(".progress-fill").style.width = progress + "%";
   li.querySelector(".progress-value").textContent = progress + " %";
   li.querySelector(".progress-track").setAttribute("aria-valuenow", progress);
-  validateBtn.hidden = progress < 100;
+  validateBtn.hidden = progress < 100 && getStatus(task) !== "done";
 }
 
 function createTaskElement(task) {
   const li = taskTemplate.content.firstElementChild.cloneNode(true);
   li.dataset.id = task.id;
+  const status = getStatus(task);
+  li.querySelector(".status-label").textContent = STATUS_LABEL[status];
+  li.querySelector(".task-status summary").setAttribute("aria-label", `Statut de ${task.name} : ${STATUS_LABEL[status]}`);
+  li.querySelectorAll("[data-status]").forEach(button => {
+    button.setAttribute("aria-pressed", String(button.dataset.status === status));
+  });
   li.classList.add("priority-" + task.priority);
 
   const square = li.querySelector(".priority-square");
@@ -147,6 +158,44 @@ function renderTasks() {
 }
 
 /* ---------- Actions sur les tâches (cocher / valider) ---------- */
+document.addEventListener("click", (event) => {
+  document.querySelectorAll(".task-status[open]").forEach(menu => {
+    if (!menu.contains(event.target)) menu.open = false;
+  });
+});
+
+taskList.addEventListener("keydown", (event) => {
+  const menu = event.target.closest(".task-status");
+  if (event.key === "Escape" && menu?.open) {
+    menu.open = false;
+    menu.querySelector("summary").focus();
+  }
+});
+
+taskList.addEventListener("click", async (event) => {
+  const button = event.target.closest("button[data-status]");
+  if (!button) return;
+  const li = button.closest(".task");
+  const task = tasks.find(item => item.id === li.dataset.id);
+  if (!task || li.querySelector(".task-status").dataset.saving) return;
+  const previousStatus = getStatus(task);
+  task.status = button.dataset.status;
+  const menu = li.querySelector(".task-status");
+  menu.dataset.saving = "true";
+  menu.open = false;
+  li.querySelector(".status-label").textContent = STATUS_LABEL[task.status];
+  updateProgress(li, task);
+  try {
+    await saveTasks();
+  } catch (error) {
+    task.status = previousStatus;
+    alert("Impossible d’enregistrer le statut : " + (error.message || String(error)));
+  } finally {
+    renderTasks();
+    [...taskList.children].find(item => item.dataset.id === task.id)?.querySelector(".task-status summary").focus();
+  }
+});
+
 taskList.addEventListener("change", (event) => {
   const checkbox = event.target;
   if (!checkbox.matches('.checklist input[type="checkbox"]')) return;
@@ -287,6 +336,7 @@ form.addEventListener("submit", async (event) => {
   }
   const task = {
     id: editingTaskId ?? newId(),
+    status: editingTaskId ? getStatus(tasks.find(item => item.id === editingTaskId)) : "todo",
     name: data.get("name").trim(),
     description: data.get("description").trim(),
     priority: data.get("priority"),

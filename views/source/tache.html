@@ -154,6 +154,14 @@
       </div>
       <ul class="checklist"></ul>
       <div class="task-foot">
+        <details class="task-status">
+          <summary class="btn btn-ghost"><span class="status-label">À faire</span><span aria-hidden="true">☰</span></summary>
+          <div class="status-options" role="group" aria-label="Statut de la tâche">
+            <button type="button" data-status="todo">À faire</button>
+            <button type="button" data-status="in-progress">En cours</button>
+            <button type="button" data-status="done">Terminé</button>
+          </div>
+        </details>
         <button type="button" class="btn btn-ghost btn-edit">Modifier</button>
         <button type="button" class="btn btn-danger btn-delete">Supprimer</button>
         <button type="button" class="btn btn-validate">Valider la tâche</button>
