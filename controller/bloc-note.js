@@ -9,6 +9,9 @@
     const contentInput = document.getElementById("contenu");
     const modalTitle = document.getElementById("modal-titre");
     const submitButton = form.querySelector('[type="submit"]');
+    const deleteModal = document.getElementById("delete-modal");
+    const confirmDelete = document.getElementById("confirm-delete");
+    let deletingId = null;
     let editingId = null;
     let notes = [];
     let notesReady;
@@ -58,8 +61,9 @@
         remove.className = "supprimer";
         remove.textContent = "Supprimer";
         remove.addEventListener("click", () => {
-          notes = notes.filter((item) => item.id !== note.id);
-          saveNotes().then(renderNotes).catch(error => alert("La suppression de la note a ?chou? : " + error.message));
+          deletingId = note.id;
+          document.getElementById("delete-note-title").textContent = note.title;
+          deleteModal.showModal();
         });
 
         actions.append(edit, remove);
@@ -67,6 +71,30 @@
         list.append(article);
       }
     }
+
+    document.getElementById("cancel-delete").addEventListener("click", () => deleteModal.close());
+    deleteModal.addEventListener("click", (event) => {
+      if (event.target === deleteModal) deleteModal.close();
+    });
+    deleteModal.addEventListener("close", () => { deletingId = null; });
+    document.getElementById("delete-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (confirmDelete.disabled || !deletingId) return;
+      const previousNotes = notes;
+      notes = notes.filter((note) => note.id !== deletingId);
+      confirmDelete.disabled = true;
+      try {
+        await saveNotes();
+        renderNotes();
+        deleteModal.close();
+      } catch (error) {
+        notes = previousNotes;
+        renderNotes();
+        alert("Impossible de supprimer la note : " + (error.message || String(error)));
+      } finally {
+        confirmDelete.disabled = false;
+      }
+    });
 
     function openModal(note = null) {
       if (!notesReady) return;

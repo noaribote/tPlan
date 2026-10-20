@@ -42,6 +42,19 @@
     </form>
   </dialog>
 
+  <dialog class="modal" id="delete-modal" aria-labelledby="delete-title" aria-describedby="delete-message">
+    <form method="dialog" id="delete-form">
+      <div class="modal__header"><h2 id="delete-title">Supprimer cette note ?</h2></div>
+      <div class="modal__contenu">
+        <p id="delete-message">Voulez-vous vraiment supprimer la note « <strong id="delete-note-title"></strong> » ? Cette action est définitive : la note ne pourra pas être récupérée.</p>
+      </div>
+      <div class="modal__actions">
+        <button type="button" class="btn-annuler" id="cancel-delete" autofocus>Annuler</button>
+        <button type="submit" class="btn-danger" id="confirm-delete">Supprimer définitivement</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="../../controller/bloc-note.js"></script>
 </body>
 </html>
