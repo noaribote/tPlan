@@ -101,7 +101,14 @@ function monthView(y, m, index, todayKey) {
     cells += `<div class="cell${d.getMonth() !== m ? ' other' : ''}${key === todayKey ? ' today' : ''}" data-date="${key}">
       <span class="num">${d.getDate()}</span>${shown}${more}</div>`;
   }
-  return `<div class="month-view"><div class="dow-row">${['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(x => `<div>${x}</div>`).join('')}</div><div class="grid">${cells}</div></div>`;
+  const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+    .map(day => `<div>${day}</div>`)
+    .join('');
+
+  return `<div class="month-view">
+    <div class="dow-row">${daysOfWeek}</div>
+    <div class="grid">${cells}</div>
+  </div>`;
 }
 
 function weekView(mon, index, todayKey) {

@@ -139,4 +139,20 @@
       }
     });
 
-    notesReady = loadNotes().then((saved) => { notes = saved; renderNotes(); }).catch(async error => { console.error("Notes load failed", error); let details = error.message || String(error); try { details += "\n" + JSON.stringify(await window.tplanData.diagnose()); } catch (diagnosticError) { details += "\nAPI diagnostic unavailable: " + diagnosticError.message; } alert("Impossible de lire les notes :\n" + details); });
+    notesReady = loadNotes()
+      .then(saved => {
+        notes = saved;
+        renderNotes();
+      })
+      .catch(async error => {
+        console.error("Notes load failed", error);
+        let details = error.message || String(error);
+
+        try {
+          details += "\n" + JSON.stringify(await window.tplanData.diagnose());
+        } catch (diagnosticError) {
+          details += "\nAPI diagnostic unavailable: " + diagnosticError.message;
+        }
+
+        alert("Impossible de lire les notes :\n" + details);
+      });

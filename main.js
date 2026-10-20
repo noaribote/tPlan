@@ -8,9 +8,15 @@ async function ensureDataFiles() {
   await fs.mkdir(modelDirectory, { recursive: true });
   for (const [key, file] of Object.entries(dataFiles)) {
     const filePath = path.join(modelDirectory, file);
-    try { await fs.access(filePath); }
-    catch {
-      let initial = key === 'preferences' ? { theme: 'clair', grid: 'actuel', positions: {} } : key === 'app' ? {} : [];
+    try {
+      await fs.access(filePath);
+    } catch {
+      let initial =
+        key === 'preferences'
+          ? { theme: 'clair', grid: 'actuel', positions: {} }
+          : key === 'app'
+            ? {}
+            : [];
       await fs.writeFile(filePath, JSON.stringify(initial, null, 2), 'utf8');
     }
   }
@@ -49,8 +55,27 @@ ipcMain.handle('data:diagnose', async () => ({
   modelDirectory,
   files: await Promise.all(Object.entries(dataFiles).map(async ([key, name]) => {
     const file = path.join(modelDirectory, name);
-    try { const content = await fs.readFile(file, 'utf8'); return { key, file, exists: true, validJson: !!JSON.parse(content) || content.trim() === '[]' || content.trim() === '{}', writable: true }; }
-    catch (error) { return { key, file, exists: error.code !== 'ENOENT', writable: false, error: error.message }; }
+    try {
+      const content = await fs.readFile(file, 'utf8');
+      return {
+        key,
+        file,
+        exists: true,
+        validJson:
+          !!JSON.parse(content) ||
+          content.trim() === '[]' ||
+          content.trim() === '{}',
+        writable: true,
+      };
+    } catch (error) {
+      return {
+        key,
+        file,
+        exists: error.code !== 'ENOENT',
+        writable: false,
+        error: error.message,
+      };
+    }
   }))
 }));
 ipcMain.handle('data:write', async (_event, key, value) => {
@@ -67,7 +92,12 @@ ipcMain.handle('data:write', async (_event, key, value) => {
   return true;
 });
 app.whenReady().then(() => {
-  ensureDataFiles().then(createWindow).catch(error => { console.error(error); app.quit(); });
+  ensureDataFiles()
+    .then(createWindow)
+    .catch(error => {
+      console.error(error);
+      app.quit();
+    });
   nativeTheme.themeSource = 'light';
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

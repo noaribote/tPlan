@@ -1,11 +1,15 @@
 /* ---------- Variables (couleurs et réglages modifiables ici) ---------- */
 :root {
-  --fond: transparent;       /* laisse voir le fond de ta page */
-  --carte: #ffffff;          /* même blanc que tes autres blocs */
+  --fond: transparent;
+  /* laisse voir le fond de ta page */
+  --carte: #ffffff;
+  /* même blanc que tes autres blocs */
   --encre: #1f2d2a;
   --encre-douce: #66787a;
-  --accent: #1f7a63;         /* vert profond, assorti au vert menthe */
-  --accent-clair: #e8f7f2;   /* menthe très pâle */
+  --accent: #1f7a63;
+  /* vert profond, assorti au vert menthe */
+  --accent-clair: #e8f7f2;
+  /* menthe très pâle */
   --danger: #c0452f;
   --bordure: #d5dbe2;
   --rayon: 10px;
@@ -48,7 +52,9 @@ body {
   border-radius: var(--rayon);
 }
 
-[hidden] { display: none !important; }
+[hidden] {
+  display: none !important;
+}
 
 .app__header-actions {
   display: flex;
@@ -86,7 +92,9 @@ body {
 }
 
 .btn-ajouter:hover,
-.btn-enregistrer:hover { filter: brightness(1.12); }
+.btn-enregistrer:hover {
+  filter: brightness(1.12);
+}
 
 .modal {
   width: min(560px, calc(100% - 2rem));
@@ -99,11 +107,23 @@ body {
   box-shadow: 0 20px 50px rgba(20, 30, 45, 0.3);
 }
 
-.modal::backdrop { background: rgba(20, 30, 45, 0.55); }
-.modal[open] { animation: modal-in 0.2s ease; }
+.modal::backdrop {
+  background: rgba(20, 30, 45, 0.55);
+}
+
+.modal[open] {
+  animation: modal-in 0.2s ease;
+}
+
 @keyframes modal-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .modal form {
@@ -118,9 +138,21 @@ body {
   padding: 1rem 1.25rem;
 }
 
-.modal__header { justify-content: space-between; border-bottom: 1px solid var(--bordure); }
-.modal__header h2 { margin: 0; font-size: 1.25rem; }
-.modal__actions { justify-content: flex-end; gap: 0.6rem; border-top: 1px solid var(--bordure); }
+.modal__header {
+  justify-content: space-between;
+  border-bottom: 1px solid var(--bordure);
+}
+
+.modal__header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal__actions {
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--bordure);
+}
 
 .modal__contenu {
   display: grid;
@@ -141,8 +173,16 @@ body {
   cursor: pointer;
 }
 
-.modal__fermer { border: none; padding: 0.2rem 0.5rem; font-size: 1.5rem; line-height: 1; }
-.modal__fermer:hover, .btn-annuler:hover { border-color: var(--encre); }
+.modal__fermer {
+  border: none;
+  padding: 0.2rem 0.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.modal__fermer:hover, .btn-annuler:hover {
+  border-color: var(--encre);
+}
 
 label {
   font-weight: 600;
@@ -179,7 +219,10 @@ button:focus-visible {
 .btn-ajouter:focus-visible,
 .btn-enregistrer:focus-visible,
 .btn-annuler:focus-visible,
-.modal__fermer:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.modal__fermer:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
 
 input:focus,
 textarea:focus {
@@ -265,10 +308,35 @@ button {
 
 /* Confirmation de suppression, assortie à celle des tâches. */
 html:has(.modal[open]),
-body:has(.modal[open]) { overflow: hidden; }
-.btn-danger { background: #b42318; color: #fff; padding: 0.6rem 1.1rem; }
-.btn-danger:hover { background: #912018; }
-button:disabled { opacity: 0.6; cursor: wait; }
-#delete-modal .modal__contenu { min-height: 0; gap: 1.1rem; }
-#delete-message { margin: 0; overflow-wrap: anywhere; }
-#delete-modal .btn-annuler { padding: 0.6rem 1.1rem; }
+body:has(.modal[open]) {
+  overflow: hidden;
+}
+
+.btn-danger {
+  background: #b42318;
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+}
+
+.btn-danger:hover {
+  background: #912018;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+#delete-modal .modal__contenu {
+  min-height: 0;
+  gap: 1.1rem;
+}
+
+#delete-message {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+#delete-modal .btn-annuler {
+  padding: 0.6rem 1.1rem;
+}

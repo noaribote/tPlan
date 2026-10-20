@@ -338,5 +338,25 @@ document.getElementById("delete-form").addEventListener("submit", async (event) 
 });
 
 /* ---------- Démarrage ---------- */
-tasksReady = loadTasks().then((saved) => { tasks = saved; renderTasks(); }).catch(async error => { console.error("Task load failed", error); let details = error.message || String(error); try { details += "\n" + JSON.stringify(await window.tplanData.diagnose()); } catch (diagnosticError) { details += "\nAPI diagnostic unavailable: " + diagnosticError.message; } alert("Impossible de lire les t?ches :\n" + details); });
-window.tplanData.onTasksChanged?.(saved => { tasks = Array.isArray(saved) ? saved : []; renderTasks(); });
+tasksReady = loadTasks()
+  .then(saved => {
+    tasks = saved;
+    renderTasks();
+  })
+  .catch(async error => {
+    console.error("Task load failed", error);
+    let details = error.message || String(error);
+
+    try {
+      details += "\n" + JSON.stringify(await window.tplanData.diagnose());
+    } catch (diagnosticError) {
+      details += "\nAPI diagnostic unavailable: " + diagnosticError.message;
+    }
+
+    alert("Impossible de lire les t?ches :\n" + details);
+  });
+
+window.tplanData.onTasksChanged?.(saved => {
+  tasks = Array.isArray(saved) ? saved : [];
+  renderTasks();
+});
