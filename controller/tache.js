@@ -32,6 +32,10 @@ function saveTasks() { return window.tplanData.write("tasks", tasks); }
 
 let tasks = [];
 let tasksReady;
+let editingTaskId = null;
+let deletingTaskId = null;
+const deleteModal = document.getElementById("delete-modal");
+const submitButton = form.querySelector('[type="submit"]');
 
 /* ---------- Utilitaires ---------- */
 function newId() {
@@ -157,10 +161,19 @@ taskList.addEventListener("change", (event) => {
 });
 
 taskList.addEventListener("click", async (event) => {
-  const button = event.target.closest(".btn-validate");
+  const button = event.target.closest(".btn-validate, .btn-edit, .btn-delete");
   if (!button) return;
 
   const li = button.closest(".task");
+  const task = tasks.find((item) => item.id === li.dataset.id);
+  if (!task) return;
+  if (button.matches(".btn-edit")) { openModal(task); return; }
+  if (button.matches(".btn-delete")) {
+    deletingTaskId = task.id;
+    document.getElementById("delete-task-name").textContent = task.name;
+    deleteModal.showModal();
+    return;
+  }
   const previousTasks = tasks;
   tasks = tasks.filter((task) => task.id !== li.dataset.id);
   try {
@@ -169,30 +182,43 @@ taskList.addEventListener("click", async (event) => {
   } catch (error) {
     tasks = previousTasks;
     renderTasks();
-    alert("?chec d?enregistrement de model/tasks.json : " + (error.message || String(error)));
+    alert("Échec d’enregistrement de model/tasks.json : " + (error.message || String(error)));
   }
 });
 
 /* ---------- Fenêtre modale ---------- */
-function addCommentField() {
+function addCommentField(comment = null) {
   const row = commentTemplate.content.firstElementChild.cloneNode(true);
   commentFields.append(row);
-  row.querySelector("input").focus();
+  const input = row.querySelector("input");
+  input.value = comment?.text || "";
+  row.dataset.done = String(Boolean(comment?.done));
+  input.focus();
 }
 
-function openModal() {
+function openModal(task = null) {
   if (!tasksReady) return;
+  editingTaskId = task?.id ?? null;
   form.reset();
-  checkDates();
+  for (const field of ["name", "description"]) form.elements[field].setCustomValidity("");
   commentFields.replaceChildren();
+  if (task) {
+    for (const field of ["name", "description", "priority", "category", "start", "end", "deadline"]) {
+      form.elements[field].value = task[field] || "";
+    }
+    (task.comments || []).forEach(addCommentField);
+  }
+  document.getElementById("modal-title").textContent = task ? "Modifier la tâche" : "Nouvelle tâche";
+  submitButton.textContent = task ? "Enregistrer les modifications" : "Ajouter la tâche";
+  checkDates();
   modal.showModal();
   document.getElementById("task-name").focus();
 }
 
-document.getElementById("open-modal").addEventListener("click", openModal);
+document.getElementById("open-modal").addEventListener("click", () => openModal());
 document.getElementById("close-modal").addEventListener("click", () => modal.close());
 document.getElementById("cancel-modal").addEventListener("click", () => modal.close());
-document.getElementById("add-comment").addEventListener("click", addCommentField);
+document.getElementById("add-comment").addEventListener("click", () => addCommentField());
 
 // Clic sur le fond sombre = fermeture
 modal.addEventListener("click", (event) => {
@@ -233,6 +259,7 @@ deadlineInput.addEventListener("input", checkDates);
 /* ---------- Envoi du formulaire ---------- */
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (submitButton.disabled) return;
   checkDates();
   if (!form.reportValidity()) return;
 
@@ -249,14 +276,17 @@ form.addEventListener("submit", async (event) => {
     }
   }
 
-  const comments = data
-    .getAll("comment")
-    .map((text) => text.trim())
-    .filter((text) => text !== "")
-    .map((text) => ({ text, done: false }));
+  const comments = [...commentFields.children].map((row) => ({
+    text: row.querySelector("input").value.trim(),
+    done: row.dataset.done === "true",
+  })).filter((comment) => comment.text !== "");
 
+  if (editingTaskId && !tasks.some((item) => item.id === editingTaskId)) {
+    alert("Cette tâche n’existe plus. Fermez le formulaire pour actualiser la liste.");
+    return;
+  }
   const task = {
-    id: newId(),
+    id: editingTaskId ?? newId(),
     name: data.get("name").trim(),
     description: data.get("description").trim(),
     priority: data.get("priority"),
@@ -266,14 +296,44 @@ form.addEventListener("submit", async (event) => {
     deadline: data.get("deadline") || "",
     comments,
   };
-  tasks.push(task);
+  const previousTasks = tasks;
+  tasks = editingTaskId ? tasks.map((item) => item.id === editingTaskId ? task : item) : [...tasks, task];
+  submitButton.disabled = true;
   try {
     await saveTasks();
     renderTasks();
     modal.close();
   } catch (error) {
-    tasks = tasks.filter((item) => item.id !== task.id);
-    alert("?chec d?enregistrement de model/tasks.json : " + (error.message || String(error)));
+    tasks = previousTasks;
+    renderTasks();
+    alert("Échec d’enregistrement de model/tasks.json : " + (error.message || String(error)));
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
+document.getElementById("cancel-delete").addEventListener("click", () => deleteModal.close());
+deleteModal.addEventListener("click", (event) => {
+  if (event.target === deleteModal) deleteModal.close();
+});
+deleteModal.addEventListener("close", () => { deletingTaskId = null; });
+document.getElementById("delete-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const button = document.getElementById("confirm-delete");
+  if (button.disabled || !deletingTaskId) return;
+  const previousTasks = tasks;
+  tasks = tasks.filter((task) => task.id !== deletingTaskId);
+  button.disabled = true;
+  try {
+    await saveTasks();
+    renderTasks();
+    deleteModal.close();
+  } catch (error) {
+    tasks = previousTasks;
+    renderTasks();
+    alert("Impossible de supprimer la tâche : " + (error.message || String(error)));
+  } finally {
+    button.disabled = false;
   }
 });
 

@@ -111,6 +111,19 @@
     </form>
   </dialog>
 
+  <dialog class="modal" id="delete-modal" aria-labelledby="delete-title" aria-describedby="delete-message">
+    <form method="dialog" id="delete-form">
+      <div class="modal-head"><h2 id="delete-title">Supprimer cette tâche ?</h2></div>
+      <div class="modal-body">
+        <p id="delete-message">Voulez-vous vraiment supprimer la tâche « <strong id="delete-task-name"></strong> » ? Cette action est définitive : la tâche et sa liste à cocher ne pourront pas être récupérées.</p>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" id="cancel-delete" autofocus>Annuler</button>
+        <button type="submit" class="btn btn-danger" id="confirm-delete">Supprimer définitivement</button>
+      </div>
+    </form>
+  </dialog>
+
   <!-- ===== Modèles utilisés par le JS ===== -->
   <template id="comment-field-template">
     <li class="comment-field">
@@ -140,6 +153,8 @@
       </div>
       <ul class="checklist"></ul>
       <div class="task-foot">
+        <button type="button" class="btn btn-ghost btn-edit">Modifier</button>
+        <button type="button" class="btn btn-danger btn-delete">Supprimer</button>
         <button type="button" class="btn btn-validate">Valider la tâche</button>
       </div>
     </li>
