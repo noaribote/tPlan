@@ -138,18 +138,6 @@ main.has-expanded::before {
   animation: tile-settle 280ms cubic-bezier(.2,.8,.2,1);
 }
 
-@keyframes tile-settle {
-  0% {
-    transform: scale(.96);
-  }
-  55% {
-    transform: scale(1.025);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
 .iframe-tile.expanded > iframe {
   border-radius: 16px;
 }

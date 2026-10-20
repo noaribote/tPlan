@@ -1,3 +1,5 @@
+@import url('keyframes.css');
+
 :root {
   --bg: white;
   --surface: #ffffff;
@@ -398,17 +400,6 @@ main {
 
 .modal[open] {
   animation: modal-in 0.2s ease;
-}
-
-@keyframes modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 .modal form {

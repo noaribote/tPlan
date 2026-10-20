@@ -3,6 +3,7 @@
 @import url('nav.css');
 @import url('footer.css');
 @import url('source/media.css');
+@import url('source/keyframes.css');
 * {
   padding: 0;
   margin: 0;
