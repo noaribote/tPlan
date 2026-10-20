@@ -398,3 +398,26 @@ textarea { resize: vertical; }
 :root:not([data-theme="sombre"]):not([data-theme="vintage"]) .progress-track {
   background: #e5e7eb;
 }
+
+/* Actions assorties aux boutons du bloc-notes. */
+.task-foot .btn-edit,
+.task-foot .btn-delete {
+  padding: 0.4rem 0.9rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+}
+.task-foot .btn-edit:hover { background: var(--accent); color: #fff; }
+.task-foot .btn-delete {
+  color: #c0452f;
+  background: #fdeeea;
+  border-color: #c0452f;
+}
+.task-foot .btn-delete:hover {
+  color: #fff;
+  background: #c0452f;
+  border-color: #c0452f;
+  filter: none;
+}

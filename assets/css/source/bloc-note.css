@@ -262,3 +262,13 @@ button {
   border-color: var(--danger);
   filter: none;
 }
+
+/* Confirmation de suppression, assortie à celle des tâches. */
+html:has(.modal[open]),
+body:has(.modal[open]) { overflow: hidden; }
+.btn-danger { background: #b42318; color: #fff; padding: 0.6rem 1.1rem; }
+.btn-danger:hover { background: #912018; }
+button:disabled { opacity: 0.6; cursor: wait; }
+#delete-modal .modal__contenu { min-height: 0; gap: 1.1rem; }
+#delete-message { margin: 0; overflow-wrap: anywhere; }
+#delete-modal .btn-annuler { padding: 0.6rem 1.1rem; }
