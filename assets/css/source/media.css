@@ -34,7 +34,7 @@
   }
   .PlacementIframes > .iframe-tile.expanded {
     position: fixed;
-    inset: 12px;
+    inset: 12px 40px;
   }
   .tile-controls {
     opacity: 1;

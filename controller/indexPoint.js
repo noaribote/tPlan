@@ -30,6 +30,8 @@ dataAPI.read("app").then(data => {
 
 const grille = document.querySelector(".PlacementIframes");
 const main = grille.closest("main");
+const precedent = main.querySelector(".fullscreen-prev");
+const suivant = main.querySelector(".fullscreen-next");
 const toggleEditMode = document.getElementById("toggleEditMode");
 let modeEdition = false;
 let tuileDeplacee = null;
@@ -48,11 +50,26 @@ function definirPleinEcran(tile, isExpanded) {
         const panneauOuvert = Boolean(grille.querySelector(".iframe-tile.expanded"));
         grille.classList.toggle("has-expanded", panneauOuvert);
         main.classList.toggle("has-expanded", panneauOuvert);
+        precedent.hidden = !panneauOuvert;
+        suivant.hidden = !panneauOuvert;
         const button = tile.querySelector(".expand-tile");
         button.innerHTML = isExpanded ? '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>' : '<i class="fa-solid fa-expand"></i>';
         button.title = isExpanded ? "Réduire" : "Agrandir";
         button.setAttribute("aria-label", `${isExpanded ? "Réduire" : "Agrandir"} ${tile.querySelector("iframe").title}`);
 }
+
+function changerPanneau(direction) {
+    const tiles = [...grille.querySelectorAll(".iframe-tile")];
+    const index = tiles.findIndex((tile) => tile.classList.contains("expanded"));
+    if (index === -1 || tiles.length < 2) return;
+    const prochaine = tiles[(index + direction + tiles.length) % tiles.length];
+    // Ouvrir le nouveau panneau avant de fermer l'ancien conserve le mode agrandi.
+    definirPleinEcran(prochaine, true);
+    definirPleinEcran(tiles[index], false);
+}
+
+precedent.addEventListener("click", () => changerPanneau(-1));
+suivant.addEventListener("click", () => changerPanneau(1));
 
 main.addEventListener("click", (event) => {
     // Un clic sur le pseudo-élément ::before cible son parent main.
