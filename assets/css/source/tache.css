@@ -71,6 +71,26 @@ ul {
   letter-spacing: -0.02em;
 }
 
+.app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.task-count {
+  margin: 0;
+  padding: 0.2rem 0.75rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.archive-nav-button {
+  font-size: 1rem;
+}
+
 main {
   max-width: 760px;
   margin: 0 auto;
@@ -200,6 +220,29 @@ main {
   align-items: center;
   gap: 0.65rem;
 }
+
+.task-archive {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  opacity: .62;
+  transition: opacity .15s, color .15s, background-color .15s;
+}
+
+.task-archive:hover,
+.task-archive:focus-visible {
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  opacity: 1;
+}
+
+.task-restore { color: var(--accent-dark); }
 
 .task-title {
   flex: 1;
@@ -441,6 +484,60 @@ main {
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
+}
+
+.archive-modal-body {
+  display: block;
+  max-height: calc(100dvh - 8rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.archive-modal-body > .task-list {
+  display: grid;
+}
+
+.task-archived {
+  position: relative;
+  isolation: isolate;
+  background-color: color-mix(in srgb, var(--surface) 78%, #92999a);
+  border-color: color-mix(in srgb, var(--line) 65%, #92999a);
+  filter: grayscale(.7);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.task-archived::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(135deg, transparent 0 9px, #737b7b16 9px 11px);
+  content: "";
+  pointer-events: none;
+}
+
+.task-archived :is(.task-status, .btn-edit, .btn-delete, .btn-validate, .checklist input) {
+  pointer-events: none;
+}
+
+.task-archived .task-restore {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  background: var(--accent);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+}
+
+.task-archived .task-restore:hover,
+.task-archived .task-restore:focus-visible {
+  color: #fff;
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
 }
 
 /* ============ Formulaire ============ */
