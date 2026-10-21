@@ -26,6 +26,10 @@ const commentTemplate = document.getElementById("comment-field-template");
 const startInput = document.getElementById("task-start");
 const endInput = document.getElementById("task-end");
 const deadlineInput = document.getElementById("task-deadline");
+const archiveModal = document.getElementById("archive-modal");
+const archiveTaskList = document.getElementById("archive-task-list");
+const archiveEmptyState = document.getElementById("archive-empty-state");
+const taskCount = document.getElementById("task-count");
 
 /* ---------- Fichier JSON ---------- */
 async function loadTasks() {
@@ -153,8 +157,29 @@ function createTaskElement(task) {
 }
 
 function renderTasks() {
-  taskList.replaceChildren(...sortTasks(tasks).map(createTaskElement));
-  emptyState.hidden = tasks.length > 0;
+  const activeTasks = tasks.filter(task => task.archive !== true);
+  const archivedTasks = tasks.filter(task => task.archive === true);
+  taskList.replaceChildren(...sortTasks(activeTasks).map(createTaskElement));
+  emptyState.hidden = activeTasks.length > 0;
+  taskCount.textContent = `${activeTasks.length} ${activeTasks.length === 1 ? "tâche" : "tâches"}`;
+  archiveTaskList.replaceChildren(...sortTasks(archivedTasks).map(task => {
+    const element = createTaskElement(task);
+    const archiveButton = element.querySelector(".task-archive");
+    element.classList.add("task-archived");
+    element.querySelectorAll(".task-status, .btn-edit, .btn-delete, .btn-validate, .checklist input").forEach(control => {
+      control.disabled = true;
+    });
+    element.querySelectorAll(".task-status").forEach(status => {
+      status.open = false;
+      status.removeAttribute("tabindex");
+    });
+    archiveButton.classList.add("task-restore");
+    archiveButton.setAttribute("aria-label", "Rétablir cette tâche");
+    archiveButton.title = "Rétablir";
+    archiveButton.innerHTML = '<i class="fa-solid fa-arrow-rotate-right" aria-hidden="true"></i>';
+    return element;
+  }));
+  archiveEmptyState.hidden = archivedTasks.length > 0;
 }
 
 /* ---------- Actions sur les tâches (cocher / valider) ---------- */
@@ -209,13 +234,23 @@ taskList.addEventListener("change", (event) => {
   updateProgress(li, task);
 });
 
+archiveTaskList.addEventListener("change", event => {
+  if (!event.target.matches('.checklist input[type="checkbox"]')) return;
+  event.preventDefault();
+  event.target.checked = !event.target.checked;
+});
+
 taskList.addEventListener("click", async (event) => {
-  const button = event.target.closest(".btn-validate, .btn-edit, .btn-delete");
+  const button = event.target.closest(".btn-validate, .btn-edit, .btn-delete, .task-archive");
   if (!button) return;
 
   const li = button.closest(".task");
   const task = tasks.find((item) => item.id === li.dataset.id);
   if (!task) return;
+  if (button.matches(".task-archive")) {
+    await setArchived(task, true);
+    return;
+  }
   if (button.matches(".btn-edit")) { openModal(task); return; }
   if (button.matches(".btn-delete")) {
     deletingTaskId = task.id;
@@ -234,6 +269,34 @@ taskList.addEventListener("click", async (event) => {
     alert("Échec d’enregistrement de model/tasks.json : " + (error.message || String(error)));
   }
 });
+
+archiveTaskList.addEventListener("click", async (event) => {
+  const button = event.target.closest(".task-archive");
+  if (!button) return;
+  const li = button.closest(".task");
+  const task = tasks.find(item => item.id === li.dataset.id);
+  if (task) await setArchived(task, false);
+});
+
+async function setArchived(task, archive) {
+  const previous = task.archive;
+  task.archive = archive;
+  try {
+    await saveTasks();
+    renderTasks();
+  } catch (error) {
+    if (previous === undefined) delete task.archive;
+    else task.archive = previous;
+    renderTasks();
+    alert("Impossible d’enregistrer l’archivage : " + (error.message || String(error)));
+  }
+}
+
+archiveModal.addEventListener("click", event => {
+  if (event.target === archiveModal) archiveModal.close();
+});
+document.getElementById("close-archive-modal").addEventListener("click", () => archiveModal.close());
+document.getElementById("ouvrirArchives").addEventListener("click", () => archiveModal.showModal());
 
 /* ---------- Fenêtre modale ---------- */
 function addCommentField(comment = null) {
