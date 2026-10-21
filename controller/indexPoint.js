@@ -108,7 +108,7 @@ function sauvegarderPositions() {
     grille.querySelectorAll(".iframe-tile").forEach((tile) => {
         positions[tile.dataset.id] = POSITIONS.find((name) => tile.classList.contains(name));
     });
-    dataAPI.read("preferences").then(prefs => dataAPI.write("preferences", { ...prefs, positions })).catch(console.error);
+    dataAPI.write("preferences", { positions }).catch(console.error);
 }
 
 dataAPI.read("preferences").then(({ positions: positionsSauvegardees } = {}) => {
