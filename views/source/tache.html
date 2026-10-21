@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="../../assets/css/source/tache.css">
   <link rel="stylesheet" href="../../assets/css/source/media.css">
 </head>
@@ -14,7 +15,11 @@
 
   <header class="app-header">
     <h1>Mes tâches</h1>
-    <button type="button" class="btn btn-primary" id="open-modal">Nouvelle tâche</button>
+    <div class="app-header-actions">
+      <p class="task-count" id="task-count">0 tâche</p>
+      <button type="button" class="btn-icon archive-nav-button" id="ouvrirArchives" aria-label="Afficher les tâches archivées" title="Tâches archivées"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-primary" id="open-modal">Nouvelle tâche</button>
+    </div>
   </header>
 
   <main>
@@ -138,6 +143,7 @@
         <span class="priority-square"></span>
         <h2 class="task-title"></h2>
         <span class="badge"></span>
+        <button type="button" class="task-archive" aria-label="Archiver cette tâche" title="Archiver"><i class="fa-solid fa-box-archive" aria-hidden="true"></i></button>
       </div>
       <p class="task-desc"></p>
       <dl class="task-dates">
@@ -168,6 +174,17 @@
       </div>
     </li>
   </template>
+
+  <dialog class="modal" id="archive-modal" aria-labelledby="archive-title">
+    <div class="modal-head">
+      <h2 id="archive-title">Tâches archivées</h2>
+      <button type="button" class="btn-icon" id="close-archive-modal" aria-label="Fermer">×</button>
+    </div>
+    <div class="modal-body archive-modal-body">
+      <p class="empty-state" id="archive-empty-state" hidden>Aucune tâche archivée.</p>
+      <ul class="task-list" id="archive-task-list"></ul>
+    </div>
+  </dialog>
 
   <script src="../../controller/tache.js"></script>
 </body>

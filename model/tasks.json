@@ -18,7 +18,8 @@
         "done": false
       }
     ],
-    "status": "in-progress"
+    "status": "in-progress",
+    "archive": false
   },
   {
     "id": "4b6a3a1d-b414-4a6d-b48b-57a163f520b3",
@@ -58,7 +59,8 @@
         "done": false
       }
     ],
-    "status": "in-progress"
+    "status": "in-progress",
+    "archive": false
   },
   {
     "id": "6d2e20a5-6ee2-47ef-8f39-3d6b3c680b15",
@@ -112,7 +114,8 @@
         "text": "Relire les coordonnées",
         "done": false
       }
-    ]
+    ],
+    "archive": false
   },
   {
     "id": "9a5e69a4-b2f9-4a41-b782-074149948cb0",
