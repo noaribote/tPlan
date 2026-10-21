@@ -146,3 +146,30 @@ main.has-expanded::before {
   bottom: 12px;
   left: 12px;
 }
+
+.fullscreen-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 7;
+  width: 34px;
+  height: 44px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 12px;
+  background: var(--chosen-accent, var(--preferences-accent, #1f7a63));
+  color: white;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0003;
+}
+
+.fullscreen-prev { left: max(2px, calc(3% - 17px)); }
+.fullscreen-next { right: max(2px, calc(3% - 17px)); }
+
+.fullscreen-nav:hover { background: color-mix(in srgb, var(--chosen-accent, var(--preferences-accent, #1f7a63)) 80%, black); }
+.fullscreen-nav:focus-visible { outline: 3px solid white; outline-offset: 2px; }
+
+@media (max-width: 800px) {
+  .fullscreen-nav { position: fixed; }
+}

@@ -1,5 +1,6 @@
 {
   "theme": "clair",
+  "color": "noir",
   "grid": "actuel",
   "positions": {
     "agenda": "left",
