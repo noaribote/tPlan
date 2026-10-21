@@ -219,15 +219,15 @@
 }
 
 .preview-clair {
-  background-image: linear-gradient(135deg, #edfcf8 50%, #1f7a63 50%, #1f7a63 70%, #fff 70%);
+  background-image: linear-gradient(135deg, color-mix(in srgb, var(--chosen-accent, #1f7a63) 10%, white) 50%, var(--chosen-accent, #1f7a63) 50%, var(--chosen-accent, #1f7a63) 70%, #fff 70%);
 }
 
 .preview-sombre {
-  background-image: linear-gradient(135deg, #14231f 50%, #4fa68a 50%, #4fa68a 70%, #1c3028 70%);
+  background-image: linear-gradient(135deg, #16181c 50%, var(--chosen-accent, #4fa68a) 50%, var(--chosen-accent, #4fa68a) 70%, #22252b 70%);
 }
 
 .preview-vintage {
-  background-image: linear-gradient(135deg, #f5eddc 50%, #65754b 50%, #65754b 70%, #ad653f 70%);
+  background-image: linear-gradient(135deg, #f5eddc 50%, var(--chosen-accent, #65754b) 50%, var(--chosen-accent, #65754b) 70%, #ad653f 70%);
 }
 
 .preview-actuel {
@@ -279,3 +279,60 @@
   outline: 2px solid var(--preferences-accent);
   outline-offset: 3px;
 }
+
+
+/* La couleur principale est indépendante du thème. */
+.preferences-colors { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); }
+.preferences-colors .preference-preview { height: 48px; }
+:root[data-color="jaune"] { --chosen-accent: #927000; --chosen-bright: #e2b62e; }
+:root[data-color="noir"] { --chosen-accent: #242424; --chosen-bright: #a3a3a3; }
+:root[data-color="violet"] { --chosen-accent: #7543b7; --chosen-bright: #b58ae9; }
+:root[data-color="bleu"] { --chosen-accent: #2869b5; --chosen-bright: #78b3f2; }
+:root[data-color]:not([data-color="vert"]) {
+    --accent: var(--chosen-accent);
+    --preferences-accent: var(--chosen-accent);
+    --accent-dark: var(--chosen-accent);
+    --accent-soft: color-mix(in srgb, var(--chosen-accent) 14%, var(--preferences-surface));
+    --accent-clair: var(--accent-soft);
+    --today: var(--accent-soft);
+    --bg-color-whitegrey: color-mix(in srgb, var(--chosen-accent) 12%, var(--preferences-surface));
+}
+:root[data-theme="sombre"][data-color]:not([data-color="vert"]) {
+    --bg-color-white: #16181c; --bg: #16181c; --fond: #16181c;
+    --card: #22252b; --surface: #22252b; --carte: #22252b;
+    --preferences-surface: #22252b;
+    --text: #f1f2f5; --ink: #f1f2f5; --encre: #f1f2f5;
+    --muted: #b0b5bf; --encre-douce: #b0b5bf; --preferences-muted: #b0b5bf;
+    --preferences-text: #f1f2f5;
+    --line: #474c55; --bordure: #474c55; --preferences-line: #474c55;
+    --accent: var(--chosen-bright); --accent-dark: var(--chosen-bright);
+    --preferences-accent: var(--chosen-bright);
+}
+:root[data-color] #baredenavigation button,
+:root[data-color] #toggleEditMode,
+:root[data-color] .tile-controls button {
+    background: var(--preferences-accent) !important;
+    color: #fff;
+}
+:root[data-color] #toggleEditMode[aria-pressed="true"] {
+    outline: 2px solid var(--preferences-accent); outline-offset: 3px;
+    filter: brightness(1.15);
+}
+:root[data-theme="sombre"][data-color]:not([data-color="vert"]) :is(.btn-primary, .btn-ajouter, .btn-enregistrer, .progress-fill),
+:root[data-theme="sombre"][data-color]:not([data-color="vert"]) #baredenavigation button,
+:root[data-theme="sombre"][data-color]:not([data-color="vert"]) #toggleEditMode,
+:root[data-theme="sombre"][data-color]:not([data-color="vert"]) .tile-controls button {
+    background: var(--chosen-accent) !important;
+    color: #fff;
+}
+
+/* Colorer les silhouettes des dispositions avec la couleur sélectionnée. */
+:is(.preview-actuel, .preview-inverse, .preview-colonnes) {
+    background-color: var(--chosen-accent, var(--preferences-accent));
+    background-image: none;
+    -webkit-mask: var(--layout-preview) center / 100% 100% no-repeat;
+    mask: var(--layout-preview) center / 100% 100% no-repeat;
+}
+.preview-actuel { --layout-preview: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Cg fill='%231f7a63'%3E%3Crect x='8' y='8' width='32' height='64' rx='4'/%3E%3Crect x='46' y='8' width='66' height='29' rx='4'/%3E%3Crect x='46' y='43' width='66' height='29' rx='4'/%3E%3C/g%3E%3C/svg%3E"); }
+.preview-inverse { --layout-preview: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Cg fill='%231f7a63'%3E%3Crect x='80' y='8' width='32' height='64' rx='4'/%3E%3Crect x='8' y='8' width='66' height='29' rx='4'/%3E%3Crect x='8' y='43' width='66' height='29' rx='4'/%3E%3C/g%3E%3C/svg%3E"); }
+.preview-colonnes { --layout-preview: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Cg fill='%231f7a63'%3E%3Crect x='8' y='8' width='31' height='64' rx='4'/%3E%3Crect x='45' y='8' width='30' height='64' rx='4'/%3E%3Crect x='81' y='8' width='31' height='64' rx='4'/%3E%3C/g%3E%3C/svg%3E"); }

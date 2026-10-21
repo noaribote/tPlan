@@ -1,20 +1,22 @@
 (() => {
     const themes = ["clair", "sombre", "vintage"];
+    const couleurs = ["vert", "jaune", "noir", "violet", "bleu"];
     const dispositions = ["actuel", "inverse", "colonnes"];
     const dialogue = document.getElementById("personnalisation");
     const ouvrir = document.getElementById("ouvrirPersonnalisation");
     const grille = document.querySelector(".PlacementIframes");
     const statut = document.getElementById("preferencesStatut");
     const stylesheet = new URL("../assets/css/nav.css", document.baseURI).href;
-    let preferences = { theme: "clair", grid: "actuel", positions: {} };
+    let preferences = { theme: "clair", color: "vert", grid: "actuel", positions: {} };
     let theme = "clair";
+    let couleur = "vert";
 
-    async function enregistrer() {
+    async function enregistrer(changements) {
         try {
-            await window.tplanData.write("preferences", preferences);
-            statut.textContent = "Vos choix sont enregistr?s automatiquement.";
+            await window.tplanData.write("preferences", changements);
+            statut.textContent = "Vos choix sont enregistrés automatiquement.";
         } catch {
-            statut.textContent = "Impossible d?enregistrer les pr?f?rences.";
+            statut.textContent = "Impossible d’enregistrer les préférences.";
         }
     }
 
@@ -37,6 +39,7 @@
                 doc.head.append(lien);
             }
             doc.documentElement.dataset.theme = theme;
+            doc.documentElement.dataset.color = couleur;
         } catch { /* Une iframe externe ne partage pas les styles locaux. */ }
     }
 
@@ -45,6 +48,13 @@
         document.documentElement.dataset.theme = valeur;
         grille.querySelectorAll("iframe").forEach(appliquerIframe);
         selectionner("data-theme-choice", valeur);
+    }
+
+    function appliquerCouleur(valeur) {
+        couleur = valeur;
+        document.documentElement.dataset.color = valeur;
+        grille.querySelectorAll("iframe").forEach(appliquerIframe);
+        selectionner("data-color-choice", valeur);
     }
 
     function appliquerGrille(valeur) {
@@ -59,6 +69,7 @@
         preferences = { ...preferences, ...(saved || {}) };
         theme = themes.includes(preferences.theme) ? preferences.theme : "clair";
         appliquerTheme(theme);
+        appliquerCouleur(couleurs.includes(preferences.color) ? preferences.color : "vert");
         appliquerGrille(dispositions.includes(preferences.grid) ? preferences.grid : "actuel");
     });
 
@@ -80,14 +91,21 @@
         bouton.addEventListener("click", () => {
             appliquerTheme(bouton.dataset.themeChoice);
             preferences.theme = theme;
-            enregistrer();
+            enregistrer({ theme });
+        });
+    });
+    dialogue.querySelectorAll("[data-color-choice]").forEach((bouton) => {
+        bouton.addEventListener("click", () => {
+            appliquerCouleur(bouton.dataset.colorChoice);
+            preferences.color = couleur;
+            enregistrer({ color: couleur });
         });
     });
     dialogue.querySelectorAll("[data-grid-choice]").forEach((bouton) => {
         bouton.addEventListener("click", () => {
             appliquerGrille(bouton.dataset.gridChoice);
             preferences.grid = bouton.dataset.gridChoice;
-            enregistrer();
+            enregistrer({ grid: preferences.grid });
         });
     });
 })();
