@@ -336,3 +336,15 @@
 .preview-actuel { --layout-preview: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Cg fill='%231f7a63'%3E%3Crect x='8' y='8' width='32' height='64' rx='4'/%3E%3Crect x='46' y='8' width='66' height='29' rx='4'/%3E%3Crect x='46' y='43' width='66' height='29' rx='4'/%3E%3C/g%3E%3C/svg%3E"); }
 .preview-inverse { --layout-preview: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Cg fill='%231f7a63'%3E%3Crect x='80' y='8' width='32' height='64' rx='4'/%3E%3Crect x='8' y='8' width='66' height='29' rx='4'/%3E%3Crect x='8' y='43' width='66' height='29' rx='4'/%3E%3C/g%3E%3C/svg%3E"); }
 .preview-colonnes { --layout-preview: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Cg fill='%231f7a63'%3E%3Crect x='8' y='8' width='31' height='64' rx='4'/%3E%3Crect x='45' y='8' width='30' height='64' rx='4'/%3E%3Crect x='81' y='8' width='31' height='64' rx='4'/%3E%3C/g%3E%3C/svg%3E"); }
+
+/* Couleurs supplémentaires, avec variantes pour les accents du thème sombre. */
+:root[data-color="bordeaux"] { --chosen-accent: #852c48; --chosen-bright: #df91aa; }
+:root[data-color="rouge"] { --chosen-accent: #bd3434; --chosen-bright: #f38d8d; }
+:root[data-color="orange"] { --chosen-accent: #b85c16; --chosen-bright: #f4ad70; }
+:root[data-color="magenta"] { --chosen-accent: #ae287b; --chosen-bright: #ed8ac9; }
+:root[data-color="cyan"] { --chosen-accent: #087b8c; --chosen-bright: #70d4e3; }
+:root[data-color="gris"] { --chosen-accent: #606773; --chosen-bright: #bfc5cf; }
+
+:root[data-theme="sombre"][data-color="noir"] .progress-fill {
+    background: #fff !important;
+}

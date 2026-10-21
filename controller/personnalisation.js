@@ -1,6 +1,6 @@
 (() => {
     const themes = ["clair", "sombre", "vintage"];
-    const couleurs = ["vert", "jaune", "noir", "violet", "bleu"];
+    const couleurs = ["vert", "jaune", "noir", "violet", "bleu", "bordeaux", "rouge", "orange", "magenta", "cyan", "gris"];
     const dispositions = ["actuel", "inverse", "colonnes"];
     const dialogue = document.getElementById("personnalisation");
     const ouvrir = document.getElementById("ouvrirPersonnalisation");

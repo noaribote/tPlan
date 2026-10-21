@@ -19,7 +19,7 @@ function normalizePreferences(value = {}) {
     Object.keys(defaultPreferences.positions).every(key => slots.includes(positions[key]));
   return {
     theme: ['clair', 'sombre', 'vintage'].includes(input.theme) ? input.theme : defaultPreferences.theme,
-    color: ['vert', 'jaune', 'noir', 'violet', 'bleu'].includes(input.color) ? input.color : defaultPreferences.color,
+    color: ['vert', 'jaune', 'noir', 'violet', 'bleu', 'bordeaux', 'rouge', 'orange', 'magenta', 'cyan', 'gris'].includes(input.color) ? input.color : defaultPreferences.color,
     grid: ['actuel', 'inverse', 'colonnes'].includes(input.grid) ? input.grid : defaultPreferences.grid,
     positions: validPositions
       ? Object.fromEntries(Object.keys(defaultPreferences.positions).map(key => [key, positions[key]]))
