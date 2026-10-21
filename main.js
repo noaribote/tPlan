@@ -4,6 +4,28 @@ const fs = require('fs/promises');
 let mainWindow;
 const modelDirectory = path.join(__dirname, 'model');
 const dataFiles = { notes: 'notes.json', tasks: 'tasks.json', preferences: 'preferences.json', app: 'app-data.json' };
+const defaultPreferences = {
+  theme: 'clair',
+  color: 'violet',
+  grid: 'actuel',
+  positions: { agenda: 'left', taches: 'top-right', 'bloc-note': 'bottom-right' }
+};
+function normalizePreferences(value = {}) {
+  const input = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  const positions = { ...defaultPreferences.positions, ...input.positions };
+  const slots = ['left', 'top-right', 'bottom-right'];
+  const validPositions = Object.values(defaultPreferences.positions).length ===
+    new Set(Object.keys(defaultPreferences.positions).map(key => positions[key])).size &&
+    Object.keys(defaultPreferences.positions).every(key => slots.includes(positions[key]));
+  return {
+    theme: ['clair', 'sombre', 'vintage'].includes(input.theme) ? input.theme : defaultPreferences.theme,
+    color: ['vert', 'jaune', 'noir', 'violet', 'bleu'].includes(input.color) ? input.color : defaultPreferences.color,
+    grid: ['actuel', 'inverse', 'colonnes'].includes(input.grid) ? input.grid : defaultPreferences.grid,
+    positions: validPositions
+      ? Object.fromEntries(Object.keys(defaultPreferences.positions).map(key => [key, positions[key]]))
+      : { ...defaultPreferences.positions }
+  };
+}
 async function ensureDataFiles() {
   await fs.mkdir(modelDirectory, { recursive: true });
   for (const [key, file] of Object.entries(dataFiles)) {
@@ -13,7 +35,7 @@ async function ensureDataFiles() {
     } catch {
       let initial =
         key === 'preferences'
-          ? { theme: 'clair', grid: 'actuel', positions: {} }
+          ? normalizePreferences()
           : key === 'app'
             ? {}
             : [];
@@ -49,7 +71,8 @@ ipcMain.handle('data:read', async (_event, key) => {
   const file = dataFiles[key];
   if (!file) throw new Error('Type de données inconnu.');
   await ensureDataFiles();
-  return JSON.parse(await fs.readFile(path.join(modelDirectory, file), 'utf8'));
+  const value = JSON.parse(await fs.readFile(path.join(modelDirectory, file), 'utf8'));
+  return key === 'preferences' ? normalizePreferences(value) : value;
 });
 ipcMain.handle('data:diagnose', async () => ({
   modelDirectory,
@@ -78,22 +101,43 @@ ipcMain.handle('data:diagnose', async () => ({
     }
   }))
 }));
-ipcMain.handle('data:write', async (_event, key, value) => {
+// Sérialiser les écritures pour éviter les collisions sur les fichiers temporaires.
+const pendingWrites = new Map();
+ipcMain.handle('data:write', (_event, key, value) => {
   const file = dataFiles[key];
   if (!file) throw new Error('Type de données inconnu.');
-  await ensureDataFiles();
-  const filePath = path.join(modelDirectory, file);
-  const temporaryPath = `${filePath}.tmp`;
-  await fs.writeFile(temporaryPath, JSON.stringify(value, null, 2), 'utf8');
-  await fs.rename(temporaryPath, filePath);
-  if (key === 'tasks') {
-    for (const window of BrowserWindow.getAllWindows()) window.webContents.send('data:tasks-changed', value);
-  }
-  return true;
+  const operation = (pendingWrites.get(key) || Promise.resolve()).catch(() => {}).then(async () => {
+    await ensureDataFiles();
+    const filePath = path.join(modelDirectory, file);
+    const temporaryPath = `${filePath}.tmp`;
+    const saved = key === 'preferences'
+      ? normalizePreferences({
+          ...JSON.parse(await fs.readFile(filePath, 'utf8')),
+          ...value,
+          positions: {
+            ...JSON.parse(await fs.readFile(filePath, 'utf8')).positions,
+            ...value?.positions
+          }
+        })
+      : value;
+    await fs.writeFile(temporaryPath, JSON.stringify(saved, null, 2), 'utf8');
+    await fs.rename(temporaryPath, filePath);
+    if (key === 'tasks') {
+      for (const window of BrowserWindow.getAllWindows()) window.webContents.send('data:tasks-changed', saved);
+    }
+    return true;
+  });
+  pendingWrites.set(key, operation);
+  return operation;
 });
 app.whenReady().then(() => {
   ensureDataFiles()
-    .then(createWindow)
+    .then(async () => {
+      const file = path.join(modelDirectory, dataFiles.preferences);
+      const value = normalizePreferences(JSON.parse(await fs.readFile(file, 'utf8')));
+      await fs.writeFile(file, JSON.stringify(value, null, 2), 'utf8');
+      createWindow();
+    })
     .catch(error => {
       console.error(error);
       app.quit();

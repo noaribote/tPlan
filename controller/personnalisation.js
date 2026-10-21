@@ -7,9 +7,9 @@
     const grille = document.querySelector(".PlacementIframes");
     const statut = document.getElementById("preferencesStatut");
     const stylesheet = new URL("../assets/css/nav.css", document.baseURI).href;
-    let preferences = { theme: "clair", color: "vert", grid: "actuel", positions: {} };
+    let preferences = { theme: "clair", color: "violet", grid: "actuel", positions: { agenda: "left", taches: "top-right", "bloc-note": "bottom-right" } };
     let theme = "clair";
-    let couleur = "vert";
+    let couleur = "violet";
 
     async function enregistrer(changements) {
         try {
@@ -69,7 +69,7 @@
         preferences = { ...preferences, ...(saved || {}) };
         theme = themes.includes(preferences.theme) ? preferences.theme : "clair";
         appliquerTheme(theme);
-        appliquerCouleur(couleurs.includes(preferences.color) ? preferences.color : "vert");
+        appliquerCouleur(couleurs.includes(preferences.color) ? preferences.color : "violet");
         appliquerGrille(dispositions.includes(preferences.grid) ? preferences.grid : "actuel");
     });
 
