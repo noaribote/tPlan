@@ -124,13 +124,13 @@ button:hover {
 .month-view {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
 }
 
 .month-view .grid {
   flex: 1;
   min-height: 0;
-  grid-auto-rows: 1fr;
+  grid-auto-rows: minmax(110px, auto);
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
 }
@@ -170,24 +170,96 @@ button:hover {
   padding: 2px 6px;
   margin-top: 3px;
   border-radius: 4px;
-  color: #fff;
-  white-space: nowrap;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  white-space: normal;
+  overflow-wrap: anywhere;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.task.pro {
+.task.priority-standard {
+  --prio: #9aa3ae;
+}
+
+.task.priority-moyen {
+  --prio: #e8b923;
+}
+
+.task.priority-urgent {
+  --prio: #d93a2f;
+}
+
+.task-markers {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+
+.task .priority-square {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background: var(--prio, #9aa3ae);
+}
+
+.category-badge {
+  display: table;
+  max-width: 100%;
+  padding: 1px 5px;
+  margin: 0;
+  border-radius: 999px;
+  font-size: .6rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.category-badge.pro {
   background: var(--pro);
 }
 
-.task.perso {
+.category-badge.perso {
   background: var(--perso);
 }
 
-.more {
-  font-size: .72rem;
-  color: var(--muted);
-  margin-top: 2px;
+.task-title {
+  display: block;
+}
+
+.compact-tasks .cell .task {
+  display: inline-flex;
+  padding: 4px;
+  margin: 3px 2px 0 0;
+  vertical-align: top;
+}
+
+.compact-tasks .cell .num {
+  display: block;
+  width: fit-content;
+}
+
+.compact-tasks .task-markers {
+  margin: 0;
+}
+
+.compact-tasks .category-badge,
+.compact-tasks .task-title,
+.compact-tasks .deadline-label {
+  display: none;
+}
+
+.task.deadline {
+  box-shadow: inset 3px 0 0 rgba(0, 0, 0, .3);
+}
+
+.deadline-label {
+  display: block;
+  font-size: .65rem;
+  font-weight: 600;
+  opacity: .9;
 }
 
 /* Vue semaine */
