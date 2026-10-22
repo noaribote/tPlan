@@ -521,6 +521,10 @@ main {
   pointer-events: none;
 }
 
+.task-archived .checklist label {
+  cursor: default;
+}
+
 .task-archived .task-restore {
   position: relative;
   z-index: 1;
