@@ -152,15 +152,14 @@ main.has-expanded::before {
   top: 50%;
   z-index: 7;
   width: 34px;
-  height: 44px;
+  height: min-content;
   transform: translateY(-50%);
   border: 0;
   border-radius: 12px;
   background: var(--chosen-accent, var(--preferences-accent, #1f7a63));
   color: white;
-  font-size: 32px;
-  line-height: 1;
   cursor: pointer;
+  padding: 20px;
   box-shadow: 0 2px 8px #0003;
 }
 
@@ -170,6 +169,9 @@ main.has-expanded::before {
 .fullscreen-nav:hover { background: color-mix(in srgb, var(--chosen-accent, var(--preferences-accent, #1f7a63)) 80%, black); }
 .fullscreen-nav:focus-visible { outline: 3px solid white; outline-offset: 2px; }
 
-@media (max-width: 800px) {
-  .fullscreen-nav { position: fixed; }
+.fullscreen-nav span {  font-size: 15px; }
+.fullscreen-nav span i {
+  position: absolute;
+  right: calc(50% / 2);
+  bottom: calc(50% - (15px/2));
 }

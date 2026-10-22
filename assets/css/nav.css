@@ -253,21 +253,6 @@
   grid-template-areas: "left top bottom";
 }
 
-@media (max-width: 440px) {
-  #personnalisation {
-    padding: 18px;
-  }
-  .preferences-options {
-    gap: 6px;
-  }
-  .preference-choice {
-    font-size: .75rem;
-  }
-  .preference-preview {
-    height: 60px;
-  }
-}
-
 /* Harmoniser les commandes avec la palette vintage, même en mode éditeur. */
 :root[data-theme="vintage"] #baredenavigation button,
 :root[data-theme="vintage"] #toggleEditMode {

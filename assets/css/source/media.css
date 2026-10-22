@@ -21,6 +21,7 @@
     height: auto;
     padding: 58px 12px 16px;
   }
+  .fullscreen-nav { position: fixed; }
   .PlacementIframes {
     width: 100%;
     height: auto;
@@ -208,6 +209,21 @@
   }
   .comment-field input {
     min-width: 0;
+  }
+}
+
+@media (max-width: 440px) {
+  #personnalisation {
+    padding: 18px;
+  }
+  .preferences-options {
+    gap: 6px;
+  }
+  .preference-choice {
+    font-size: .75rem;
+  }
+  .preference-preview {
+    height: 60px;
   }
 }
 
