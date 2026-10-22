@@ -21,7 +21,12 @@
     </div>
   </header>
 
-  <main id="calendar"></main>
+  <div class="calendar-frame">
+    <main id="calendar"></main>
+    <div id="calendar-scrollbar" class="calendar-scrollbar" role="scrollbar" aria-label="Défilement du calendrier" aria-controls="calendar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+      <div id="calendar-scrollbar-thumb" class="calendar-scrollbar__thumb"></div>
+    </div>
+  </div>
 
   <footer class="zoombar">
     <button id="zoom-out" aria-label="Dézoomer">−</button>

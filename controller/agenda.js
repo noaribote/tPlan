@@ -17,6 +17,36 @@ const MAX_MAIN_TASKS = 3;                          // tâches visibles par case 
 
 const state = { view: 'month', date: new Date() };
 const $ = id => document.getElementById(id);
+const calendar = $('calendar');
+const calendarScrollbar = $('calendar-scrollbar');
+const calendarScrollbarThumb = $('calendar-scrollbar-thumb');
+let scrollbarDragOffset = 0;
+
+function updateCalendarScrollbar() {
+  const trackHeight = calendarScrollbar.clientHeight;
+  const contentHeight = calendar.scrollHeight;
+  const viewportHeight = calendar.clientHeight;
+  if (!trackHeight || !viewportHeight) return;
+
+  const maxScroll = Math.max(0, contentHeight - viewportHeight);
+  const thumbHeight = maxScroll === 0
+    ? trackHeight
+    : Math.max(44, trackHeight * viewportHeight / contentHeight);
+  const thumbTravel = Math.max(0, trackHeight - thumbHeight);
+  const scrollRatio = maxScroll === 0 ? 0 : calendar.scrollTop / maxScroll;
+  calendarScrollbarThumb.style.height = `${thumbHeight}px`;
+  calendarScrollbarThumb.style.transform = `translateY(${thumbTravel * scrollRatio}px)`;
+  calendarScrollbar.setAttribute('aria-valuenow', String(Math.round(scrollRatio * 100)));
+}
+
+function scrollCalendarFromPointer(clientY, offset = calendarScrollbarThumb.offsetHeight / 2) {
+  const trackRect = calendarScrollbar.getBoundingClientRect();
+  const thumbHeight = calendarScrollbarThumb.offsetHeight;
+  const thumbTravel = Math.max(0, trackRect.height - thumbHeight);
+  const maxScroll = Math.max(0, calendar.scrollHeight - calendar.clientHeight);
+  const thumbTop = Math.min(thumbTravel, Math.max(0, clientY - trackRect.top - offset));
+  calendar.scrollTop = thumbTravel === 0 ? 0 : (thumbTop / thumbTravel) * maxScroll;
+}
 
 /* ---------- Dates ---------- */
 const pad = n => String(n).padStart(2, '0');
@@ -83,6 +113,7 @@ function render() {
   const i = VIEWS.indexOf(state.view);
   $('zoom-in').disabled = i === 0;
   $('zoom-out').disabled = i === VIEWS.length - 1;
+  requestAnimationFrame(updateCalendarScrollbar);
 }
 
 const taskHTML = t => `<div class="task ${t.cat}" title="${esc(t.title)}">${esc(t.title)}</div>`;
@@ -163,6 +194,38 @@ $('today').onclick = () => { state.date = new Date(); render(); };
 $('zoom-in').onclick = () => zoom(1);
 $('zoom-out').onclick = () => zoom(-1);
 $('chk-pro').onchange = $('chk-perso').onchange = render;
+
+calendar.addEventListener('scroll', updateCalendarScrollbar, { passive: true });
+window.addEventListener('resize', updateCalendarScrollbar);
+calendarScrollbar.addEventListener('pointerdown', event => {
+  if (event.target === calendarScrollbarThumb) {
+    event.preventDefault();
+    scrollbarDragOffset = event.clientY - calendarScrollbarThumb.getBoundingClientRect().top;
+    calendarScrollbar.setPointerCapture(event.pointerId);
+  } else {
+    scrollCalendarFromPointer(event.clientY);
+  }
+});
+calendarScrollbar.addEventListener('pointermove', event => {
+  if (calendarScrollbar.hasPointerCapture(event.pointerId)) scrollCalendarFromPointer(event.clientY, scrollbarDragOffset);
+});
+calendarScrollbar.addEventListener('pointerup', event => {
+  if (calendarScrollbar.hasPointerCapture(event.pointerId)) calendarScrollbar.releasePointerCapture(event.pointerId);
+});
+calendarScrollbar.addEventListener('pointercancel', event => {
+  if (calendarScrollbar.hasPointerCapture(event.pointerId)) calendarScrollbar.releasePointerCapture(event.pointerId);
+});
+calendarScrollbar.addEventListener('keydown', event => {
+  const page = Math.max(80, calendar.clientHeight * 0.8);
+  if (event.key === 'ArrowDown') calendar.scrollTop += 40;
+  else if (event.key === 'ArrowUp') calendar.scrollTop -= 40;
+  else if (event.key === 'PageDown') calendar.scrollTop += page;
+  else if (event.key === 'PageUp') calendar.scrollTop -= page;
+  else if (event.key === 'Home') calendar.scrollTop = 0;
+  else if (event.key === 'End') calendar.scrollTop = calendar.scrollHeight;
+  else return;
+  event.preventDefault();
+});
 
 // Clic sur un mois (vue année) ou un jour (vue mois) = zoom dessus
 $('calendar').addEventListener('click', e => {

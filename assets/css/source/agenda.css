@@ -100,11 +100,69 @@ button:hover {
 }
 
 /* Zone calendrier */
-#calendar {
+.calendar-frame {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
   flex: 1;
   min-height: 0;
+  min-width: 0;
+}
+
+#calendar {
+  flex: 1;
+  width: 0;
+  height: 100%;
+  min-height: 0;
   padding: 12px 16px;
+  min-width: 0;
   overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+/* La barre native est masquée au profit du contrôle toujours visible ci-dessous. */
+#calendar::-webkit-scrollbar {
+  display: none;
+}
+
+.calendar-scrollbar {
+  position: relative;
+  flex: 0 0 10px;
+  margin: 12px 4px 12px 0;
+  width: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+
+.calendar-scrollbar__thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 44px;
+  background: var(--accent);
+  border: 2px solid color-mix(in srgb, var(--accent) 12%, var(--bg));
+  background-clip: padding-box;
+  border-radius: 999px;
+  cursor: grab;
+}
+
+.calendar-scrollbar__thumb:active {
+  cursor: grabbing;
+}
+
+.calendar-scrollbar:hover .calendar-scrollbar__thumb,
+.calendar-scrollbar:focus-visible .calendar-scrollbar__thumb {
+  background-color: var(--accent-dark, var(--accent));
+}
+
+.calendar-scrollbar:focus-visible {
+  outline: 3px solid var(--pro);
+  outline-offset: 2px;
 }
 
 .dow-row, .grid {
