@@ -3,17 +3,16 @@
    ============================================================ */
 const CONFIG = {
   fields: {
-    title: 'title',             // nom de la tâche
+    title: 'name',              // nom de la tâche
     category: 'category',       // "Professionnel" ou "Personnel"
-    start: 'startDate',         // date de début   (YYYY-MM-DD)
-    end: 'endDate',             // date de fin     (YYYY-MM-DD)
+    start: 'start',             // date de début   (YYYY-MM-DD)
+    end: 'end',                 // date de fin     (YYYY-MM-DD)
     deadline: 'deadline'        // deadline        (YYYY-MM-DD)
   }
 };
 
 const VIEWS = ['week', 'month', 'year'];           // du plus zoomé au moins zoomé : index 0 = semaine
 const VIEW_NAMES = { week: 'Semaine', month: 'Mois', year: 'Année' };
-const MAX_MAIN_TASKS = 3;                          // tâches visibles par case en vue mois
 
 const state = { view: 'month', date: new Date() };
 const $ = id => document.getElementById(id);
@@ -50,7 +49,8 @@ function buildIndex() {
 
     const cat = /^pro/i.test(String(t[f.category] || '')) ? 'pro' : 'perso';
     const title = t[f.title] || t.name || t.text || '(sans titre)';
-    days.forEach(k => (index[k] = index[k] || []).push({ title, cat }));
+    const priority = ['urgent', 'moyen', 'standard'].includes(t.priority) ? t.priority : 'standard';
+    days.forEach(k => (index[k] = index[k] || []).push({ title, cat, priority, isDeadline: !!dl && k === fmt(dl) }));
   });
   return index;
 }
@@ -83,9 +83,15 @@ function render() {
   const i = VIEWS.indexOf(state.view);
   $('zoom-in').disabled = i === 0;
   $('zoom-out').disabled = i === VIEWS.length - 1;
+  updateTaskDensity();
 }
 
-const taskHTML = t => `<div class="task ${t.cat}" title="${esc(t.title)}">${esc(t.title)}</div>`;
+// Les titres sont réservés à la vue semaine.
+function updateTaskDensity() {
+  $('calendar').classList.toggle('compact-tasks', state.view === 'month');
+}
+
+const taskHTML = t => `<div class="task priority-${t.priority}${t.isDeadline ? ' deadline' : ''}" title="${esc(t.title)} — Priorité : ${t.priority}${t.isDeadline ? ' — Échéance' : ''}"><div class="task-markers"><span class="priority-square" aria-label="Priorité : ${t.priority}"></span><span class="category-badge ${t.cat}">${t.cat === 'pro' ? 'Pro' : 'Perso'}</span></div><span class="task-title">${esc(t.title)}</span>${t.isDeadline ? '<span class="deadline-label">Échéance</span>' : ''}</div>`;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 function monthView(y, m, index, todayKey) {
@@ -96,10 +102,9 @@ function monthView(y, m, index, todayKey) {
   for (let i = 0; i < weeks * 7; i++) {
     const d = addDays(start, i), key = fmt(d);
     const tasks = visibleTasks(index, key);
-    const shown = tasks.slice(0, MAX_MAIN_TASKS).map(taskHTML).join('');
-    const more = tasks.length > MAX_MAIN_TASKS ? `<div class="more">+${tasks.length - MAX_MAIN_TASKS} autre(s)</div>` : '';
+    const shown = tasks.map(taskHTML).join('');
     cells += `<div class="cell${d.getMonth() !== m ? ' other' : ''}${key === todayKey ? ' today' : ''}" data-date="${key}">
-      <span class="num">${d.getDate()}</span>${shown}${more}</div>`;
+      <span class="num">${d.getDate()}</span>${shown}</div>`;
   }
   const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
     .map(day => `<div>${day}</div>`)
@@ -187,5 +192,14 @@ $('calendar').addEventListener('wheel', e => {
 // Se met à jour si les tâches changent dans un autre onglet
 
 
-window.tplanData.read('tasks').then(raw => { cachedTasks = Array.isArray(raw) ? raw : Object.values(raw || {}); render(); });
-window.tplanData.onTasksChanged?.(tasks => { cachedTasks = Array.isArray(tasks) ? tasks : []; render(); });
+let receivedTaskUpdate = false;
+window.tplanData.onTasksChanged?.(tasks => {
+  receivedTaskUpdate = true;
+  cachedTasks = Array.isArray(tasks) ? tasks : Object.values(tasks || {});
+  render();
+});
+window.tplanData.read('tasks').then(raw => {
+  if (receivedTaskUpdate) return;
+  cachedTasks = Array.isArray(raw) ? raw : Object.values(raw || {});
+  render();
+});

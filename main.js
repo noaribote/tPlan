@@ -123,7 +123,11 @@ ipcMain.handle('data:write', (_event, key, value) => {
     await fs.writeFile(temporaryPath, JSON.stringify(saved, null, 2), 'utf8');
     await fs.rename(temporaryPath, filePath);
     if (key === 'tasks') {
-      for (const window of BrowserWindow.getAllWindows()) window.webContents.send('data:tasks-changed', saved);
+      for (const window of BrowserWindow.getAllWindows()) {
+        for (const frame of window.webContents.mainFrame.framesInSubtree) {
+          frame.send('data:tasks-changed', saved);
+        }
+      }
     }
     return true;
   });
