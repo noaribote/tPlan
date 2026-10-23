@@ -11,7 +11,11 @@ const { app, BrowserWindow, Menu, globalShortcut, ipcMain, shell, nativeTheme } 
 const path = require('path');
 const fs = require('fs/promises');
 let mainWindow;
-const modelDirectory = path.join(__dirname, 'model');
+// L'archive app.asar est en lecture seule : stocker les données installées
+// dans le dossier utilisateur propre à l'application.
+const modelDirectory = app.isPackaged
+  ? path.join(app.getPath('userData'), 'model')
+  : path.join(__dirname, 'model');
 const dataFiles = { notes: 'notes.json', tasks: 'tasks.json', preferences: 'preferences.json', app: 'app-data.json' };
 const defaultPreferences = {
   theme: 'clair',

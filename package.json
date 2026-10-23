@@ -17,14 +17,20 @@
       "target": [
         "nsis"
       ],
+      "icon": "icon.ico"
+    },
+    "mac": {
+      "icon": "icon.icns"
+    },
+    "linux": {
       "icon": "icon.png"
     },
     "nsis": {
       "oneClick": false,
-      "installerIcon": "icon.png",
-      "uninstallerIcon": "icon.png",
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
       "uninstallDisplayName": "tPlan",
-      "license": "license.md",
+      "license": "LICENSE",
       "allowToChangeInstallationDirectory": true
     }
   },
