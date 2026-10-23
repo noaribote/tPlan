@@ -100,7 +100,7 @@ function createWindow() {
     fullscreen: false,
     resizable: true,
     webPreferences: {
-      devTools: true,
+      devTools: false,
       preload: path.join(__dirname, 'controller/services/preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
@@ -110,7 +110,7 @@ function createWindow() {
   Menu.setApplicationMenu(null);
   mainWindow.setIcon(path.join(__dirname, 'assets/image/logo_sans_background-bordure-bold.png'));
   mainWindow.loadFile('views/home.html');
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 }
 ipcMain.on('open-external-link',
   /**
