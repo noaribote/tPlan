@@ -19,6 +19,9 @@ L'intelligence artificielle a toutefois constitué un atout majeur dans le déve
 
 1) Ouvrez le terminal courant ou ouvrez-en un nouveau
 2) Exécutez la commande ``npm i --save-dev electron-builder`` dans ce dernier
-3) Exécutez la commande ``npm run build``
+3) Exécutez la commande ``npm run build`` selon votre système d'exploitation :
+   - Windows : ``npm run build:win``
+   - MacOS : ``npm run build:mac``
+   - Linux : ``npm run build:linux``
 
 [Plus d'informations concernant la compilation](https://www.electron.build/)
