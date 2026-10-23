@@ -1,10 +1,1 @@
-{
-  "theme": "sombre",
-  "color": "gris",
-  "grid": "actuel",
-  "positions": {
-    "agenda": "left",
-    "taches": "top-right",
-    "bloc-note": "bottom-right"
-  }
-}
+{}
