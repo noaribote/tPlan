@@ -84,7 +84,7 @@ const monthName = (y, m) => new Date(y, m, 1).toLocaleDateString('fr-FR', { mont
 let cachedTasks = [];
 // Retourne { "YYYY-MM-DD": [ {title, cat}, ... ] }
 /**
- * Répartit cachedTasks par jour de début, de fin et d’échéance, en évitant les doublons pour une même tâche et un même jour.
+ * Répartit les tâches non archivées par jour de début, de fin et d’échéance, en évitant les doublons pour une même tâche et un même jour.
  * @description Entrées : aucun paramètre. Les données de contexte sont capturées dans la portée englobante.
  * @returns {AgendaIndex} Tâches d’affichage regroupées par date YYYY-MM-DD.
  * @description Types utilisés : AgendaIndex, Set<string>, string, number.
@@ -99,6 +99,7 @@ function buildIndex() {
      * @description Types utilisés : Task, void, Set<string>, string, number.
      */
     t => {
+    if (t.archive === true) return;
     const start = parse(t[f.start]), end = parse(t[f.end]), dl = parse(t[f.deadline]);
     const days = new Set();                         // Set = jamais deux fois la même tâche le même jour
     if (start && end) {

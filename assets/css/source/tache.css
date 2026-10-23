@@ -517,7 +517,7 @@ main {
   pointer-events: none;
 }
 
-.task-archived :is(.task-status, .btn-edit, .btn-delete, .btn-validate, .checklist input) {
+.task-archived :is(.task-status, .btn-edit, .btn-validate, .checklist input) {
   pointer-events: none;
 }
 
@@ -598,6 +598,7 @@ textarea {
 }
 
 .choice {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -614,6 +615,10 @@ textarea {
 
 .choice input {
   position: absolute;
+  inset: 0 auto auto 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
   opacity: 0;
   pointer-events: none;
 }
@@ -692,14 +697,42 @@ textarea {
 }
 
 .task-foot .btn-delete {
-  color: #c0452f;
-  background: #fdeeea;
-  border-color: #c0452f;
+  color: #fff;
+  background: #b42318;
+  border-color: #b42318;
 }
 
-.task-foot .btn-delete:hover {
+.task-foot .btn-delete:hover,
+.task-foot .btn-delete:focus-visible {
   color: #fff;
-  background: #c0452f;
-  border-color: #c0452f;
+  background: #912018;
+  border-color: #912018;
   filter: none;
+}
+
+/* Suppression accessible directement à côté du rétablissement des archives. */
+.task-archived .task-delete {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: #fff;
+  background: #b42318;
+  border: 1.5px solid #b42318;
+  border-radius: 8px;
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.task-archived .task-delete:hover,
+.task-archived .task-delete:focus-visible {
+  background: #912018;
+  border-color: #912018;
 }

@@ -74,27 +74,6 @@
     ]
   },
   {
-    "id": "8f9b83d6-f8ae-4809-9bd0-06cc512846ec",
-    "name": "Préparer le CV",
-    "description": "Mettre à jour le CV pour candidater à un stage.",
-    "priority": "moyen",
-    "category": "professionnel",
-    "start": "2026-11-12",
-    "end": "2026-11-11",
-    "deadline": "2026-11-18",
-    "comments": [
-      {
-        "text": "Ajouter le projet de groupe",
-        "done": false
-      },
-      {
-        "text": "Relire les coordonnées",
-        "done": false
-      }
-    ],
-    "archive": false
-  },
-  {
     "id": "9a5e69a4-b2f9-4a41-b782-074149948cb0",
     "name": "Sport à la salle",
     "description": "Faire une séance de sport en fin de journée.",
@@ -125,27 +104,11 @@
       },
       {
         "text": "Assembler les parties",
-        "done": false
+        "done": true
       }
-    ]
-  },
-  {
-    "id": "b2d31764-1cb3-4c8a-9bd2-b9940fb0904e",
-    "name": "Réserver le train",
-    "description": "Prendre un billet pour rentrer chez la famille ce week-end.",
-    "priority": "moyen",
-    "category": "personnel",
-    "deadline": "2026-11-19",
-    "comments": [
-      {
-        "text": "Comparer les horaires",
-        "done": false
-      },
-      {
-        "text": "Choisir le billet",
-        "done": false
-      }
-    ]
+    ],
+    "archive": true,
+    "status": "done"
   },
   {
     "id": "c3e0d87a-5c24-4565-8c73-01ea382b9c61",
@@ -228,5 +191,17 @@
         "done": false
       }
     ]
+  },
+  {
+    "id": "4c90dd68-e4c4-431f-ac94-b0196b11c260",
+    "status": "todo",
+    "name": "d",
+    "description": "d",
+    "priority": "urgent",
+    "category": "personnel",
+    "start": "",
+    "end": "",
+    "deadline": "",
+    "comments": []
   }
 ]

@@ -67,6 +67,7 @@ let tasks = [];
 let tasksReady;
 let editingTaskId = null;
 let deletingTaskId = null;
+let confirmingArchive = false;
 const deleteModal = document.getElementById("delete-modal");
 const submitButton = form.querySelector('[type="submit"]');
 
@@ -292,7 +293,7 @@ function renderTasks() {
     const element = createTaskElement(task);
     const archiveButton = element.querySelector(".task-archive");
     element.classList.add("task-archived");
-    element.querySelectorAll(".task-status, .btn-edit, .btn-delete, .btn-validate, .checklist input").forEach(
+    element.querySelectorAll(".task-status, .btn-edit, .btn-validate, .checklist input").forEach(
       /**
        * Désactive les contrôles de la tâche archivée.
        * @param {HTMLElement} control - Élément DOM à traiter.
@@ -313,6 +314,13 @@ function renderTasks() {
       status.open = false;
       status.removeAttribute("tabindex");
     });
+    const deleteButton = element.querySelector(".btn-delete");
+    deleteButton.classList.add("task-delete");
+    deleteButton.disabled = false;
+    deleteButton.setAttribute("aria-label", "Supprimer cette tâche définitivement");
+    deleteButton.title = "Supprimer";
+    deleteButton.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+    archiveButton.after(deleteButton);
     archiveButton.classList.add("task-restore");
     archiveButton.setAttribute("aria-label", "Rétablir cette tâche");
     archiveButton.title = "Rétablir";
@@ -469,30 +477,29 @@ taskList.addEventListener("click",
     return;
   }
   if (button.matches(".btn-edit")) { openModal(task); return; }
-  if (button.matches(".btn-delete")) {
-    deletingTaskId = task.id;
-    document.getElementById("delete-task-name").textContent = task.name;
-    deleteModal.showModal();
-    return;
-  }
-  const previousTasks = tasks;
-  tasks = tasks.filter(
-    /**
-     * Conserve les éléments dont l’identifiant diffère de celui à supprimer.
-     * @param {Task} task - Tâche courante.
-     * @returns {boolean} Résultat du test appliqué à l’élément.
-     * @description Types utilisés : Task, boolean.
-     */
-    (task) => task.id !== li.dataset.id);
-  try {
-    await saveTasks();
-    renderTasks();
-  } catch (error) {
-    tasks = previousTasks;
-    renderTasks();
-    alert("Échec d’enregistrement de model/tasks.json : " + (error.message || String(error)));
-  }
+  openTaskConfirmation(task, button.matches(".btn-validate"));
 });
+
+/** Ouvre la confirmation d’archivage ou de suppression d’une tâche. */
+function openTaskConfirmation(task, archive = false) {
+  deletingTaskId = task.id;
+  confirmingArchive = archive;
+  document.getElementById("delete-title").textContent = archive
+    ? "Valider et archiver cette tâche ?"
+    : "Supprimer cette tâche ?";
+  const confirmButton = document.getElementById("confirm-delete");
+  confirmButton.classList.toggle("btn-primary", archive);
+  confirmButton.classList.toggle("btn-danger", !archive);
+  confirmButton.textContent = archive
+    ? "Valider et archiver"
+    : "Supprimer définitivement";
+  document.getElementById("delete-action").textContent = archive ? "valider et archiver" : "supprimer";
+  document.getElementById("delete-consequence").textContent = archive
+    ? "La tâche sera conservée dans les archives et pourra être rétablie."
+    : "Cette action est définitive : la tâche et sa liste à cocher ne pourront pas être récupérées.";
+  document.getElementById("delete-task-name").textContent = task.name;
+  deleteModal.showModal();
+}
 
 archiveTaskList.addEventListener("click",
   /**
@@ -502,7 +509,7 @@ archiveTaskList.addEventListener("click",
    * @description Types utilisés : MouseEvent, Promise<void>, boolean, string, Task.
    */
   async (event) => {
-  const button = event.target.closest(".task-archive");
+  const button = event.target.closest(".task-archive, .btn-delete");
   if (!button) return;
   const li = button.closest(".task");
   const task = tasks.find(
@@ -513,7 +520,12 @@ archiveTaskList.addEventListener("click",
      * @description Types utilisés : Task, boolean.
      */
     item => item.id === li.dataset.id);
-  if (task) await setArchived(task, false);
+  if (!task) return;
+  if (button.matches(".btn-delete")) {
+    openTaskConfirmation(task);
+    return;
+  }
+  await setArchived(task, false);
 });
 
 /**
@@ -825,7 +837,7 @@ deleteModal.addEventListener("close",
    * @returns {void} Aucune valeur de retour ; les effets éventuels portent sur l’état ou le DOM.
    * @description Types utilisés : void.
    */
-  () => { deletingTaskId = null; });
+  () => { deletingTaskId = null; confirmingArchive = false; });
 document.getElementById("delete-form").addEventListener("submit",
   /**
    * Traite l’événement « submit » de document.getElementById("delete-form"). Ferme le dialogue concerné lorsque les conditions sont remplies. Reconstruit la liste des tâches. Sauvegarde les modifications et gère les erreurs de persistance.
@@ -838,14 +850,10 @@ document.getElementById("delete-form").addEventListener("submit",
   const button = document.getElementById("confirm-delete");
   if (button.disabled || !deletingTaskId) return;
   const previousTasks = tasks;
-  tasks = tasks.filter(
-    /**
-     * Conserve les éléments dont l’identifiant diffère de celui à supprimer.
-     * @param {Task} task - Tâche courante.
-     * @returns {boolean} Résultat du test appliqué à l’élément.
-     * @description Types utilisés : Task, boolean.
-     */
-    (task) => task.id !== deletingTaskId);
+  const archive = confirmingArchive;
+  tasks = archive
+    ? tasks.map(task => task.id === deletingTaskId ? { ...task, archive: true, status: "done" } : task)
+    : tasks.filter(task => task.id !== deletingTaskId);
   button.disabled = true;
   try {
     await saveTasks();
@@ -854,7 +862,7 @@ document.getElementById("delete-form").addEventListener("submit",
   } catch (error) {
     tasks = previousTasks;
     renderTasks();
-    alert("Impossible de supprimer la tâche : " + (error.message || String(error)));
+    alert((archive ? "Impossible d’archiver la tâche : " : "Impossible de supprimer la tâche : ") + (error.message || String(error)));
   } finally {
     button.disabled = false;
   }
