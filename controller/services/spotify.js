@@ -1,3 +1,13 @@
+/**
+ * Types métier partagés pour la documentation ; aucune importation à l’exécution.
+ * @typedef {import('../types').AppData} AppData
+ */
+/**
+ * Valide une URL open.spotify.com, charge sa version intégrée et déclenche la sauvegarde du lien dans les données de l’application.
+ * @param {string} url - URL Spotify saisie.
+ * @returns {boolean} true si le lecteur est chargé, false si le lecteur ou le lien est invalide ; la sauvegarde reste asynchrone.
+ * @description Types utilisés : string, boolean, HTMLElement, URL, number.
+ */
 export function chargerSpotify(url) {
     const player = document.getElementById("playerSpotify");
     if (!player || !url) return false;
@@ -16,7 +26,14 @@ export function chargerSpotify(url) {
     player.src = parsed.toString();
     window.tplanData
         .read("app")
-        .then(data =>
+        .then(
+          /**
+           * Poursuit le traitement après résolution de l’opération précédente.
+           * @param {AppData} data - Données de configuration de l’application.
+           * @returns {Promise<boolean>} Résultat asynchrone ; une erreur non interceptée rejette la promesse.
+           * @description Types utilisés : AppData, Promise<boolean>, string.
+           */
+          data =>
             window.tplanData.write("app", {
                 ...data,
                 spotify: url.trim()

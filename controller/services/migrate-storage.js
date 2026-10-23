@@ -1,4 +1,18 @@
-(async () => {
+/**
+ * Types métier partagés pour la documentation ; aucune importation à l’exécution.
+ * @typedef {import('../types').Task} Task
+ * @typedef {import('../types').Note} Note
+ * @typedef {import('../types').Preferences} Preferences
+ * @typedef {import('../types').JsonValue} JsonValue
+ */
+(
+  /**
+   * Initialise le service et ses gestionnaires d’événements.
+   * @description Entrées : aucun paramètre. Les données de contexte sont capturées dans la portée englobante.
+   * @returns {Promise<void>} Résultat asynchrone ; une erreur non interceptée rejette la promesse.
+   * @description Types utilisés : Promise<void>, JsonValue, string, number, Task, Note, Preferences.
+   */
+  async () => {
   if (!window.tplanData) return;
   const keys = ["notes", "tasks", "tplan-theme", "tplan-grid", "positionsIframes", "spotify"];
   const legacy = {};
@@ -20,4 +34,11 @@
   await window.tplanData.write("preferences", preferences);
   if (legacy.spotify) await window.tplanData.write("app", { ...(await window.tplanData.read("app")), spotify: legacy.spotify });
   for (const key of Object.keys(legacy)) localStorage.removeItem(key);
-})().catch(error => console.error("Migration des anciennes donn?es impossible :", error));
+})().catch(
+  /**
+   * Traite l’erreur de l’opération précédente.
+   * @param {Error} error - Erreur transmise par la promesse rejetée.
+   * @returns {void} Aucune valeur de retour ; les effets éventuels portent sur l’état ou le DOM.
+   * @description Types utilisés : Error, void, string.
+   */
+  error => console.error("Migration des anciennes donn?es impossible :", error));
