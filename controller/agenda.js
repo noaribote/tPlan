@@ -84,7 +84,54 @@ function render() {
   $('zoom-in').disabled = i === 0;
   $('zoom-out').disabled = i === VIEWS.length - 1;
   updateTaskDensity();
+  requestAnimationFrame(updateCalendarScrollbar);
 }
+
+/* Barre dédiée adjacente au calendrier : indépendante de la visibilité des scrollbars système. */
+const calendarScrollbar = $('calendar-scrollbar');
+const calendarScrollbarThumb = $('calendar-scrollbar-thumb');
+function updateCalendarScrollbar() {
+  const cal = $('calendar');
+  if (!cal || !calendarScrollbar || !calendarScrollbarThumb) return;
+  const trackHeight = calendarScrollbar.clientHeight;
+  const contentHeight = cal.scrollHeight;
+  if (!trackHeight) return;
+  calendarScrollbar.hidden = false;
+  const hasOverflow = contentHeight > cal.clientHeight + 1;
+  const thumbHeight = hasOverflow
+    ? Math.min(trackHeight, Math.max(24, trackHeight * cal.clientHeight / contentHeight))
+    : trackHeight;
+  const maxThumbTop = trackHeight - thumbHeight;
+  const scrollRange = hasOverflow ? contentHeight - cal.clientHeight : 1;
+  calendarScrollbarThumb.style.height = `${thumbHeight}px`;
+  calendarScrollbarThumb.style.transform = `translateY(${maxThumbTop * cal.scrollTop / scrollRange}px)`;
+}
+
+$('calendar').addEventListener('scroll', updateCalendarScrollbar, { passive: true });
+new ResizeObserver(updateCalendarScrollbar).observe($('calendar'));
+new ResizeObserver(updateCalendarScrollbar).observe(calendarScrollbar);
+let scrollbarDrag = null;
+calendarScrollbarThumb.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  scrollbarDrag = { pointerY: e.clientY, scrollTop: $('calendar').scrollTop };
+  calendarScrollbarThumb.setPointerCapture(e.pointerId);
+});
+calendarScrollbarThumb.addEventListener('pointermove', e => {
+  if (!scrollbarDrag) return;
+  const cal = $('calendar');
+  const travel = calendarScrollbar.clientHeight - calendarScrollbarThumb.offsetHeight;
+  if (travel > 0) cal.scrollTop = scrollbarDrag.scrollTop + (e.clientY - scrollbarDrag.pointerY) * (cal.scrollHeight - cal.clientHeight) / travel;
+});
+const stopScrollbarDrag = () => { scrollbarDrag = null; };
+calendarScrollbarThumb.addEventListener('pointerup', stopScrollbarDrag);
+calendarScrollbarThumb.addEventListener('pointercancel', stopScrollbarDrag);
+calendarScrollbar.addEventListener('pointerdown', e => {
+  if (e.target === calendarScrollbarThumb) return;
+  const rect = calendarScrollbar.getBoundingClientRect();
+  const thumbCenter = calendarScrollbarThumb.getBoundingClientRect().top + calendarScrollbarThumb.offsetHeight / 2;
+  const direction = e.clientY < thumbCenter ? -1 : 1;
+  $('calendar').scrollBy({ top: direction * $('calendar').clientHeight * 0.85, behavior: 'smooth' });
+});
 
 // Les titres sont réservés à la vue semaine.
 function updateTaskDensity() {
@@ -203,3 +250,4 @@ window.tplanData.read('tasks').then(raw => {
   cachedTasks = Array.isArray(raw) ? raw : Object.values(raw || {});
   render();
 });
+

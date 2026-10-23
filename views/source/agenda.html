@@ -21,7 +21,10 @@
     </div>
   </header>
 
-  <main id="calendar"></main>
+  <div class="calendar-frame">
+    <main id="calendar"></main>
+    <div id="calendar-scrollbar" aria-hidden="true"><div id="calendar-scrollbar-thumb"></div></div>
+  </div>
 
   <footer class="zoombar">
     <button id="zoom-out" aria-label="Dézoomer">−</button>
@@ -32,3 +35,4 @@
   <script src="../../controller/agenda.js"></script>
 </body>
 </html>
+
