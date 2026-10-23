@@ -1,7 +1,7 @@
 {
-  "theme": "clair",
-  "color": "noir",
-  "grid": "actuel",
+  "theme": "sombre",
+  "color": "bleu",
+  "grid": "inverse",
   "positions": {
     "agenda": "left",
     "taches": "top-right",

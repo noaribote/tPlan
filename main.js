@@ -53,7 +53,7 @@ function createWindow() {
     resizable: true,
     webPreferences: {
       devTools: true,
-      preload: path.join(__dirname, 'controller/preload.js'),
+      preload: path.join(__dirname, 'controller/services/preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       nodeIntegrationInSubFrames: true
