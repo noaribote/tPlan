@@ -1,13 +1,14 @@
 [
   {
     "id": "2e581a0c-32e8-4418-9075-a0a70ca14f67",
-    "name": "Préparer l'exposé",
+    "status": "in-progress",
+    "name": "s",
     "description": "Rassembler les sources et organiser la présentation d'histoire.",
     "priority": "moyen",
     "category": "professionnel",
-    "start": "2026-10-30",
-    "end": "2026-10-29",
-    "deadline": "2026-11-03",
+    "start": "2026-10-15",
+    "end": "2026-11-07",
+    "deadline": "2026-12-03",
     "comments": [
       {
         "text": "Trouver trois sources fiables",
@@ -17,9 +18,7 @@
         "text": "Créer les diapositives",
         "done": false
       }
-    ],
-    "status": "in-progress",
-    "archive": false
+    ]
   },
   {
     "id": "4b6a3a1d-b414-4a6d-b48b-57a163f520b3",
@@ -39,28 +38,6 @@
         "done": false
       }
     ]
-  },
-  {
-    "id": "5c873dc7-7e36-4cab-ad9f-fc7ce26e2692",
-    "name": "Réviser l'anglais",
-    "description": "Apprendre le vocabulaire du prochain contrôle.",
-    "priority": "moyen",
-    "category": "professionnel",
-    "start": "2026-11-06",
-    "end": "2026-11-07",
-    "deadline": "2026-11-18",
-    "comments": [
-      {
-        "text": "Revoir la liste de vocabulaire",
-        "done": true
-      },
-      {
-        "text": "Faire un quiz d'entraînement",
-        "done": false
-      }
-    ],
-    "status": "in-progress",
-    "archive": false
   },
   {
     "id": "6d2e20a5-6ee2-47ef-8f39-3d6b3c680b15",
@@ -234,5 +211,22 @@
     "priority": "standard",
     "category": "personnel",
     "comments": []
+  },
+  {
+    "id": "63707aa3-7570-41bc-aebb-da6bb010e83c",
+    "status": "todo",
+    "name": "sdf",
+    "description": "sqd",
+    "priority": "moyen",
+    "category": "professionnel",
+    "start": "2026-10-15",
+    "end": "2026-10-17",
+    "deadline": "",
+    "comments": [
+      {
+        "text": "sqd",
+        "done": false
+      }
+    ]
   }
 ]

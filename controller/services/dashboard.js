@@ -1,4 +1,4 @@
-import { chargerSpotify } from "./functions/spotify.js";
+import { chargerSpotify } from "./spotify.js";
 
 const lien = document.getElementById("lienSpotify");
 const spotify = document.querySelector(".spotify");
