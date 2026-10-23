@@ -28,11 +28,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.FlexCenter {
-  flex-direction: column;
-}
+} .FlexCenter {  flex-direction: column; }
 
 ::selection {
   color: var(--bg-color-white);
